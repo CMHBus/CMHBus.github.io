@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Bus Registration</title>
+    <title>CMH Bus Registration 2024/2025</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -23,6 +23,10 @@
         h1 {
             text-align: center;
             color: #4CAF50;
+        }
+        p.intro {
+            text-align: center;
+            font-size: 18px;
         }
         label {
             margin-top: 10px;
@@ -90,7 +94,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>School Bus Registration</h1>
+        <h1>CMH Bus Registration 2024/2025</h1>
+        <p class="intro">Welcome to the CMH Bus Registration for the 2024/2025 school year. Please fill out the form below to register your children for the bus service.</p>
         <form id="registrationForm" action="https://formspree.io/f/xwpelrve" method="POST">
             <label for="parentName">Your name:</label>
             <input type="text" id="parentName" name="parentName" required><br>
@@ -106,10 +111,18 @@
             <label for="parentPhone">Parent or guardian phone numbers:</label>
             <input type="tel" id="parentPhone" name="parentPhone" required><br>
 
-            <label for="agreeCodeOfConduct">I agree to the bus code of conduct and will discuss it with my children:</label>
+            <label for="agreeCodeOfConduct">I agree to the <a href="https://bit.ly/machzikei-bus-code-of-conduct" target="_blank">bus code of conduct</a> and will discuss it with my children:</label>
             <select id="agreeCodeOfConduct" name="agreeCodeOfConduct" required>
                 <option value="yes">Yes</option>
                 <option value="no">No</option>
+            </select><br>
+
+            <label for="paymentOptions">Payment Options:</label>
+            <select id="paymentOptions" name="paymentOptions" required>
+                <option value="">-- Please Select --</option>
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+                <option value="option3">Option 3</option>
             </select><br>
 
             <div id="costEstimation">
@@ -201,4 +214,41 @@
 
         function toggleRidingTimes(childIndex) {
             const timeType = document.getElementById(`child${childIndex}TimeType`).value;
-            const ridingTimesDiv =
+            const ridingTimesDiv = document.getElementById(`child${childIndex}RidingTimes`);
+            if (timeType === 'partTime') {
+                ridingTimesDiv.style.display = 'block';
+            } else {
+                ridingTimesDiv.style.display = 'none';
+            }
+            updateCostEstimation();
+        }
+
+        function updateCostEstimation() {
+            const numChildren = document.getElementById('numChildren').value;
+            let totalCost = 500;
+            let childCosts = [];
+
+            for (let i = 1; i <= numChildren; i++) {
+                let childCost = 0;
+                const timeType = document.getElementById(`child${i}TimeType`).value;
+                if (timeType === 'fullTime') {
+                    childCost = [1200, 1000, 800, 600, 400, 200][i - 1] || 0;
+                } else {
+                    const ridingTimes = document.querySelectorAll(`#child${i}RidingTimes input[type="checkbox"]:checked`);
+                    const fraction = ridingTimes.length / 10;
+                    childCost = fraction * ([1200, 1000, 800, 600, 400, 200][i - 1] || 0);
+                }
+                childCosts.push(childCost);
+            }
+
+            // Sort child costs to apply proration to the cheapest child first
+            childCosts.sort((a, b) => a - b);
+
+            // Sum the total cost
+            totalCost += childCosts.reduce((sum, cost) => sum + cost, 0);
+
+            document.getElementById('totalCost').innerText = totalCost.toFixed(2);
+        }
+    </script>
+</body>
+</html>
