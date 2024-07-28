@@ -273,6 +273,12 @@
                     </div>
                 `;
                 childrenFormsContainer.appendChild(childForm);
+
+                // Add event listeners to checkboxes
+                const checkboxes = childForm.querySelectorAll(`#child${i}RidingTimes input[type="checkbox"]`);
+                checkboxes.forEach(checkbox => {
+                    checkbox.addEventListener('change', updateCost);
+                });
             }
 
             updateCost();
