@@ -73,6 +73,11 @@
         .riding-times input[type="checkbox"] {
             margin-right: 5px;
         }
+        .riding-times-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
         button {
             width: 100%;
             padding: 10px;
@@ -208,16 +213,18 @@
                     </div>
                     <div id="child${i}RidingTimes" class="riding-times">
                         <p>Select riding times:</p>
-                        <input type="checkbox" name="child${i}RidingTimes" value="MonAM" onchange="updateCostEstimation()"> Monday AM<br>
-                        <input type="checkbox" name="child${i}RidingTimes" value="MonPM" onchange="updateCostEstimation()"> Monday PM<br>
-                        <input type="checkbox" name="child${i}RidingTimes" value="TueAM" onchange="updateCostEstimation()"> Tuesday AM<br>
-                        <input type="checkbox" name="child${i}RidingTimes" value="TuePM" onchange="updateCostEstimation()"> Tuesday PM<br>
-                        <input type="checkbox" name="child${i}RidingTimes" value="WedAM" onchange="updateCostEstimation()"> Wednesday AM<br>
-                        <input type="checkbox" name="child${i}RidingTimes" value="WedPM" onchange="updateCostEstimation()"> Wednesday PM<br>
-                        <input type="checkbox" name="child${i}RidingTimes" value="ThuAM" onchange="updateCostEstimation()"> Thursday AM<br>
-                        <input type="checkbox" name="child${i}RidingTimes" value="ThuPM" onchange="updateCostEstimation()"> Thursday PM<br>
-                        <input type="checkbox" name="child${i}RidingTimes" value="FriAM" onchange="updateCostEstimation()"> Friday AM<br>
-                        <input type="checkbox" name="child${i}RidingTimes" value="FriPM" onchange="updateCostEstimation()"> Friday PM<br>
+                        <div class="riding-times-grid">
+                            <div><input type="checkbox" name="child${i}RidingTimes" value="MonAM" onchange="updateCostEstimation()"> Monday AM</div>
+                            <div><input type="checkbox" name="child${i}RidingTimes" value="TueAM" onchange="updateCostEstimation()"> Tuesday AM</div>
+                            <div><input type="checkbox" name="child${i}RidingTimes" value="WedAM" onchange="updateCostEstimation()"> Wednesday AM</div>
+                            <div><input type="checkbox" name="child${i}RidingTimes" value="ThuAM" onchange="updateCostEstimation()"> Thursday AM</div>
+                            <div><input type="checkbox" name="child${i}RidingTimes" value="FriAM" onchange="updateCostEstimation()"> Friday AM</div>
+                            <div><input type="checkbox" name="child${i}RidingTimes" value="MonPM" onchange="updateCostEstimation()"> Monday PM</div>
+                            <div><input type="checkbox" name="child${i}RidingTimes" value="TuePM" onchange="updateCostEstimation()"> Tuesday PM</div>
+                            <div><input type="checkbox" name="child${i}RidingTimes" value="WedPM" onchange="updateCostEstimation()"> Wednesday PM</div>
+                            <div><input type="checkbox" name="child${i}RidingTimes" value="ThuPM" onchange="updateCostEstimation()"> Thursday PM</div>
+                            <div><input type="checkbox" name="child${i}RidingTimes" value="FriPM" onchange="updateCostEstimation()"> Friday PM</div>
+                        </div>
                     </div>
                 `;
                 childrenFormsContainer.appendChild(childForm);
