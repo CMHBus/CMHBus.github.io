@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Bus Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .child-form {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>School Bus Registration</h1>
+    <form id="registrationForm">
+        <label for="parentName">Your name:</label>
+        <input type="text" id="parentName" name="parentName" required><br>
+
+        <label for="numChildren">Number of children:</label>
+        <input type="number" id="numChildren" name="numChildren" min="1" required><br>
+
+        <div id="childrenForms"></div>
+
+        <label for="parentEmail">Parent or guardian email addresses:</label>
+        <input type="email" id="parentEmail" name="parentEmail" required><br>
+
+        <label for="parentPhone">Parent or guardian phone numbers:</label>
+        <input type="tel" id="parentPhone" name="parentPhone" required><br>
+
+        <label for="agreeCodeOfConduct">I agree to the bus code of conduct and will discuss it with my children:</label>
+        <select id="agreeCodeOfConduct" name="agreeCodeOfConduct" required>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+        </select><br>
+
+        <button type="submit">Register</button>
+    </form>
+
+    <script>
+        document.getElementById('numChildren').addEventListener('input', function () {
+            const numChildren = this.value;
+            const childrenFormsContainer = document.getElementById('childrenForms');
+            childrenFormsContainer.innerHTML = '';
+
+            for (let i = 1; i <= numChildren; i++) {
+                const childForm = document.createElement('div');
+                childForm.classList.add('child-form');
+                childForm.innerHTML = `
+                    <h3>Child ${i}</h3>
+                    <label for="child${i}Grade">Grade of the child:</label>
+                    <select id="child${i}Grade" name="child${i}Grade" required>
+                        <option value="preschool">Preschool</option>
+                        <option value="JK">JK</option>
+                        <option value="SK">SK</option>
+                        <option value="Grade 1">Grade 1</option>
+                        <option value="Grade 2">Grade 2</option>
+                        <option value="Grade 3">Grade 3</option>
+                        <option value="Grade 4">Grade 4</option>
+                        <option value="Grade 5">Grade 5</option>
+                        <option value="Grade 6">Grade 6</option>
+                        <option value="Grade 7">Grade 7</option>
+                        <option value="Grade 8">Grade 8</option>
+                        <option value="Grade 9">Grade 9</option>
+                        <option value="Grade 10">Grade 10</option>
+                        <option value="Grade 11">Grade 11</option>
+                        <option value="Grade 12">Grade 12</option>
+                        <option value="adult">Adult</option>
+                    </select><br>
+
+                    <label for="child${i}TimeType">Full time or part time:</label>
+                    <select id="child${i}TimeType" name="child${i}TimeType" onchange="toggleRidingTimes(${i})" required>
+                        <option value="fullTime">Full time</option>
+                        <option value="partTime">Part time</option>
+                    </select><br>
+
+                    <div id="child${i}RidingTimes" style="display:none;">
+                        <p>Select riding times:</p>
+                        <input type="checkbox" name="child${i}RidingTimes" value="MonAM"> Monday AM<br>
+                        <input type="checkbox" name="child${i}RidingTimes" value="MonPM"> Monday PM<br>
+                        <input type="checkbox" name="child${i}RidingTimes" value="TueAM"> Tuesday AM<br>
+                        <input type="checkbox" name="child${i}RidingTimes" value="TuePM"> Tuesday PM<br>
+                        <input type="checkbox" name="child${i}RidingTimes" value="WedAM"> Wednesday AM<br>
+                        <input type="checkbox" name="child${i}RidingTimes" value="WedPM"> Wednesday PM<br>
+                        <input type="checkbox" name="child${i}RidingTimes" value="ThuAM"> Thursday AM<br>
+                        <input type="checkbox" name="child${i}RidingTimes" value="ThuPM"> Thursday PM<br>
+                        <input type="checkbox" name="child${i}RidingTimes" value="FriAM"> Friday AM<br>
+                        <input type="checkbox" name="child${i}RidingTimes" value="FriPM"> Friday PM<br>
+                    </div>
+
+                    <label for="child${i}CarSeat">Will the child be in a carseat?</label>
+                    <select id="child${i}CarSeat" name="child${i}CarSeat" required>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select><br>
+
+                    <label for="child${i}School">What school will the child attend?</label>
+                    <select id="child${i}School" name="child${i}School" required>
+                        <option value="OJCS">OJCS</option>
+                        <option value="TDSO">TDSO</option>
+                        <option value="other">Other</option>
+                    </select><br>
+                `;
+                childrenFormsContainer.appendChild(childForm);
+            }
+        });
+
+        function toggleRidingTimes(childIndex) {
+            const timeType = document.getElementById(`child${childIndex}TimeType`).value;
+            const ridingTimesDiv = document.getElementById(`child${childIndex}RidingTimes`);
+            if (timeType === 'partTime') {
+                ridingTimesDiv.style.display = 'block';
+            } else {
+                ridingTimesDiv.style.display = 'none';
+            }
+        }
+
+        document.getElementById('registrationForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            // Here you can handle the form submission, e.g., send the data to a server
+            alert('Form submitted!');
+        });
+    </script>
+</body>
+</html>
