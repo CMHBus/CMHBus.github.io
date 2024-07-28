@@ -6,49 +6,119 @@
     <title>School Bus Registration</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
             margin: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+        label {
+            margin-top: 10px;
+            display: block;
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="email"],
+        input[type="tel"],
+        select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
         .child-form {
             margin-top: 20px;
-            border: 1px solid #ccc;
             padding: 10px;
+            border-top: 1px solid #ccc;
         }
-        label {
-            display: block;
+        .child-form h3 {
+            margin-top: 0;
+        }
+        .child-form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+        .child-form-row > div {
+            flex: 1;
+            min-width: 200px;
+        }
+        .riding-times {
+            display: none;
             margin-top: 10px;
+        }
+        .riding-times input[type="checkbox"] {
+            margin-right: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #costEstimation {
+            margin-top: 20px;
+            text-align: right;
+        }
+        #totalCost {
+            font-weight: bold;
+            color: #4CAF50;
         }
     </style>
 </head>
 <body>
-    <h1>School Bus Registration</h1>
-    <form id="registrationForm" action="https://formspree.io/f/xwpelrve" method="POST">
-        <label for="parentName">Your name:</label>
-        <input type="text" id="parentName" name="parentName" required><br>
+    <div class="container">
+        <h1>School Bus Registration</h1>
+        <form id="registrationForm" action="https://formspree.io/f/xwpelrve" method="POST">
+            <label for="parentName">Your name:</label>
+            <input type="text" id="parentName" name="parentName" required><br>
 
-        <label for="numChildren">Number of children:</label>
-        <input type="number" id="numChildren" name="numChildren" min="1" required><br>
+            <label for="numChildren">Number of children:</label>
+            <input type="number" id="numChildren" name="numChildren" min="1" required><br>
 
-        <div id="childrenForms"></div>
+            <div id="childrenForms"></div>
 
-        <label for="parentEmail">Parent or guardian email addresses:</label>
-        <input type="email" id="parentEmail" name="parentEmail" required><br>
+            <label for="parentEmail">Parent or guardian email addresses:</label>
+            <input type="email" id="parentEmail" name="parentEmail" required><br>
 
-        <label for="parentPhone">Parent or guardian phone numbers:</label>
-        <input type="tel" id="parentPhone" name="parentPhone" required><br>
+            <label for="parentPhone">Parent or guardian phone numbers:</label>
+            <input type="tel" id="parentPhone" name="parentPhone" required><br>
 
-        <label for="agreeCodeOfConduct">I agree to the bus code of conduct and will discuss it with my children:</label>
-        <select id="agreeCodeOfConduct" name="agreeCodeOfConduct" required>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-        </select><br>
+            <label for="agreeCodeOfConduct">I agree to the bus code of conduct and will discuss it with my children:</label>
+            <select id="agreeCodeOfConduct" name="agreeCodeOfConduct" required>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select><br>
 
-        <div id="costEstimation">
-            <p>Total Cost: $<span id="totalCost">500</span></p>
-        </div>
+            <div id="costEstimation">
+                <p>Total Cost: $<span id="totalCost">500</span></p>
+            </div>
 
-        <button type="submit">Register</button>
-    </form>
+            <button type="submit">Register</button>
+        </form>
+    </div>
 
     <script>
         document.getElementById('numChildren').addEventListener('input', function () {
@@ -65,33 +135,52 @@
                 childForm.classList.add('child-form');
                 childForm.innerHTML = `
                     <h3>Child ${i}</h3>
-                    <label for="child${i}Grade">Grade of the child:</label>
-                    <select id="child${i}Grade" name="child${i}Grade" required>
-                        <option value="preschool">Preschool</option>
-                        <option value="JK">JK</option>
-                        <option value="SK">SK</option>
-                        <option value="Grade 1">Grade 1</option>
-                        <option value="Grade 2">Grade 2</option>
-                        <option value="Grade 3">Grade 3</option>
-                        <option value="Grade 4">Grade 4</option>
-                        <option value="Grade 5">Grade 5</option>
-                        <option value="Grade 6">Grade 6</option>
-                        <option value="Grade 7">Grade 7</option>
-                        <option value="Grade 8">Grade 8</option>
-                        <option value="Grade 9">Grade 9</option>
-                        <option value="Grade 10">Grade 10</option>
-                        <option value="Grade 11">Grade 11</option>
-                        <option value="Grade 12">Grade 12</option>
-                        <option value="adult">Adult</option>
-                    </select><br>
-
-                    <label for="child${i}TimeType">Full time or part time:</label>
-                    <select id="child${i}TimeType" name="child${i}TimeType" onchange="toggleRidingTimes(${i}); updateCostEstimation();" required>
-                        <option value="fullTime">Full time</option>
-                        <option value="partTime">Part time</option>
-                    </select><br>
-
-                    <div id="child${i}RidingTimes" style="display:none;">
+                    <div class="child-form-row">
+                        <div>
+                            <label for="child${i}Grade">Grade:</label>
+                            <select id="child${i}Grade" name="child${i}Grade" required>
+                                <option value="preschool">Preschool</option>
+                                <option value="JK">JK</option>
+                                <option value="SK">SK</option>
+                                <option value="Grade 1">Grade 1</option>
+                                <option value="Grade 2">Grade 2</option>
+                                <option value="Grade 3">Grade 3</option>
+                                <option value="Grade 4">Grade 4</option>
+                                <option value="Grade 5">Grade 5</option>
+                                <option value="Grade 6">Grade 6</option>
+                                <option value="Grade 7">Grade 7</option>
+                                <option value="Grade 8">Grade 8</option>
+                                <option value="Grade 9">Grade 9</option>
+                                <option value="Grade 10">Grade 10</option>
+                                <option value="Grade 11">Grade 11</option>
+                                <option value="Grade 12">Grade 12</option>
+                                <option value="adult">Adult</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="child${i}TimeType">Full/Part time:</label>
+                            <select id="child${i}TimeType" name="child${i}TimeType" onchange="toggleRidingTimes(${i}); updateCostEstimation();" required>
+                                <option value="fullTime">Full time</option>
+                                <option value="partTime">Part time</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="child${i}CarSeat">Carseat:</label>
+                            <select id="child${i}CarSeat" name="child${i}CarSeat" required>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="child${i}School">School:</label>
+                            <select id="child${i}School" name="child${i}School" required>
+                                <option value="OJCS">OJCS</option>
+                                <option value="TDSO">TDSO</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="child${i}RidingTimes" class="riding-times">
                         <p>Select riding times:</p>
                         <input type="checkbox" name="child${i}RidingTimes" value="MonAM" onchange="updateCostEstimation()"> Monday AM<br>
                         <input type="checkbox" name="child${i}RidingTimes" value="MonPM" onchange="updateCostEstimation()"> Monday PM<br>
@@ -104,19 +193,6 @@
                         <input type="checkbox" name="child${i}RidingTimes" value="FriAM" onchange="updateCostEstimation()"> Friday AM<br>
                         <input type="checkbox" name="child${i}RidingTimes" value="FriPM" onchange="updateCostEstimation()"> Friday PM<br>
                     </div>
-
-                    <label for="child${i}CarSeat">Will the child be in a carseat?</label>
-                    <select id="child${i}CarSeat" name="child${i}CarSeat" required>
-                        <option value="yes">Yes</option>
-                        <option value="no">No</option>
-                    </select><br>
-
-                    <label for="child${i}School">What school will the child attend?</label>
-                    <select id="child${i}School" name="child${i}School" required>
-                        <option value="OJCS">OJCS</option>
-                        <option value="TDSO">TDSO</option>
-                        <option value="other">Other</option>
-                    </select><br>
                 `;
                 childrenFormsContainer.appendChild(childForm);
             }
@@ -131,6 +207,7 @@
             } else {
                 ridingTimesDiv.style.display = 'none';
             }
+            updateCostEstimation();
         }
 
         function updateCostEstimation() {
