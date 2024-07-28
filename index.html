@@ -48,8 +48,13 @@
             padding: 10px;
             border-top: 1px solid #ccc;
         }
-        .child-form h3 {
-            margin-top: 0;
+        .child-form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .child-form-header h3 {
+            margin: 0;
         }
         .child-form-row {
             display: flex;
@@ -100,16 +105,16 @@
             <label for="parentName">Your name:</label>
             <input type="text" id="parentName" name="parentName" required><br>
 
-            <label for="numChildren">Number of children:</label>
-            <input type="number" id="numChildren" name="numChildren" min="1" required><br>
-
-            <div id="childrenForms"></div>
-
             <label for="parentEmail">Parent or guardian email addresses:</label>
             <input type="email" id="parentEmail" name="parentEmail" required><br>
 
             <label for="parentPhone">Parent or guardian phone numbers:</label>
             <input type="tel" id="parentPhone" name="parentPhone" required><br>
+
+            <div id="childrenForms"></div>
+
+            <label for="numChildren">Number of children:</label>
+            <input type="number" id="numChildren" name="numChildren" min="1" required><br>
 
             <label for="agreeCodeOfConduct">I agree to the <a href="https://bit.ly/machzikei-bus-code-of-conduct" target="_blank">bus code of conduct</a> and will discuss it with my children:</label>
             <select id="agreeCodeOfConduct" name="agreeCodeOfConduct" required>
@@ -148,7 +153,10 @@
                 const childForm = document.createElement('div');
                 childForm.classList.add('child-form');
                 childForm.innerHTML = `
-                    <h3>Child ${i}</h3>
+                    <div class="child-form-header">
+                        <h3>Child ${i}</h3>
+                        <input type="text" id="child${i}Name" name="child${i}Name" placeholder="Child's name" required>
+                    </div>
                     <div class="child-form-row">
                         <div>
                             <label for="child${i}Grade">Grade:</label>
@@ -232,25 +240,32 @@
             const numChildren = document.getElementById('numChildren').value;
             let totalCost = 500;
             let fullTimeCosts = [1200, 1000, 800, 600, 400, 200];
-            let childCosts = [];
+            let partTimeChildren = [];
+            let fullTimeChildrenCount = 0;
 
             for (let i = 1; i <= numChildren; i++) {
                 const timeType = document.getElementById(`child${i}TimeType`).value;
-                let childCost = 0;
-
                 if (timeType === 'fullTime') {
-                    childCost = fullTimeCosts[0];
-                    fullTimeCosts.shift();
+                    fullTimeChildrenCount++;
                 } else if (timeType === 'partTime') {
                     const ridingTimes = document.querySelectorAll(`#child${i}RidingTimes input[type="checkbox"]:checked`);
-                    const fraction = ridingTimes.length / 10;
-                    childCost = fraction * fullTimeCosts[0];
-                    fullTimeCosts.shift();
+                    partTimeChildren.push(ridingTimes.length / 10);
                 }
-                childCosts.push(childCost);
             }
 
-            totalCost += childCosts.reduce((sum, cost) => sum + cost, 0);
+            // Calculate cost for full-time children first
+            for (let i = 0; i < fullTimeChildrenCount; i++) {
+                totalCost += fullTimeCosts.shift();
+            }
+
+            // Sort part-time children by descending fraction to apply prorating
+            partTimeChildren.sort((a, b) => b - a);
+
+            // Apply prorated costs to remaining cost slots
+            for (let fraction of partTimeChildren) {
+                totalCost += fraction * fullTimeCosts.shift();
+            }
+
             document.getElementById('totalCost').innerText = totalCost.toFixed(2);
         }
     </script>
