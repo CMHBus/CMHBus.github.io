@@ -22,7 +22,7 @@
 </head>
 <body>
     <h1>School Bus Registration</h1>
-    <form id="registrationForm">
+    <form id="registrationForm" action="https://formspree.io/f/xwpelrve" method="POST" data-netlify="true">
         <label for="parentName">Your name:</label>
         <input type="text" id="parentName" name="parentName" required><br>
 
@@ -123,12 +123,6 @@
                 ridingTimesDiv.style.display = 'none';
             }
         }
-
-        document.getElementById('registrationForm').addEventListener('submit', function (event) {
-            event.preventDefault();
-            // Here you can handle the form submission, e.g., send the data to a server
-            alert('Form submitted!');
-        });
     </script>
 </body>
 </html>
