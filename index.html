@@ -167,6 +167,8 @@
                 <p>Total Cost: $<span id="totalCost">500</span></p>
             </div>
 
+            <input type="hidden" id="hiddenTotalCost" name="totalCost" value="500">
+
             <label for="agreeCodeOfConduct">I agree to the <a href="https://bit.ly/machzikei-bus-code-of-conduct" target="_blank">bus code of conduct</a> and will discuss it with my children:</label>
             <select id="agreeCodeOfConduct" name="agreeCodeOfConduct" required>
                 <option value="">-- Please select --</option>
@@ -235,17 +237,38 @@
                                 <option value="partTime">Part time</option>
                             </select>
                         </div>
+                        <div>
+                            <label for="child${i}Carseat">Will the child be in a carseat?</label>
+                            <select id="child${i}Carseat" name="child${i}Carseat" required>
+                                <option value="">-- Please select --</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="child${i}School">What school will the child attend?</label>
+                            <select id="child${i}School" name="child${i}School" onchange="toggleOtherSchool(${i})" required>
+                                <option value="">-- Please select --</option>
+                                <option value="OJCS">OJCS</option>
+                                <option value="TDSO">TDSO</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <input type="text" id="child${i}OtherSchool" name="child${i}OtherSchool" class="other-school" placeholder="Please specify school">
+                        </div>
                     </div>
                     <div id="child${i}RidingTimes" class="riding-times">
                         <label>Riding times (select all that apply):</label>
                         <div class="riding-times-grid">
-                            <label><input type="checkbox" name="child${i}RidingTimes" value="morning"> Morning</label>
-                            <label><input type="checkbox" name="child${i}RidingTimes" value="afternoon"> Afternoon</label>
-                            <label><input type="checkbox" name="child${i}RidingTimes" value="monday"> Monday</label>
-                            <label><input type="checkbox" name="child${i}RidingTimes" value="tuesday"> Tuesday</label>
-                            <label><input type="checkbox" name="child${i}RidingTimes" value="wednesday"> Wednesday</label>
-                            <label><input type="checkbox" name="child${i}RidingTimes" value="thursday"> Thursday</label>
-                            <label><input type="checkbox" name="child${i}RidingTimes" value="friday"> Friday</label>
+                            <label><input type="checkbox" name="child${i}RidingTimes" value="Monday AM" checked> Monday AM</label>
+                            <label><input type="checkbox" name="child${i}RidingTimes" value="Monday PM" checked> Monday PM</label>
+                            <label><input type="checkbox" name="child${i}RidingTimes" value="Tuesday AM" checked> Tuesday AM</label>
+                            <label><input type="checkbox" name="child${i}RidingTimes" value="Tuesday PM" checked> Tuesday PM</label>
+                            <label><input type="checkbox" name="child${i}RidingTimes" value="Wednesday AM" checked> Wednesday AM</label>
+                            <label><input type="checkbox" name="child${i}RidingTimes" value="Wednesday PM" checked> Wednesday PM</label>
+                            <label><input type="checkbox" name="child${i}RidingTimes" value="Thursday AM" checked> Thursday AM</label>
+                            <label><input type="checkbox" name="child${i}RidingTimes" value="Thursday PM" checked> Thursday PM</label>
+                            <label><input type="checkbox" name="child${i}RidingTimes" value="Friday AM" checked> Friday AM</label>
+                            <label><input type="checkbox" name="child${i}RidingTimes" value="Friday PM" checked> Friday PM</label>
                         </div>
                     </div>
                 `;
@@ -264,6 +287,16 @@
                 ridingTimes.style.display = 'none';
             }
             updateCost();
+        }
+
+        function toggleOtherSchool(childIndex) {
+            const schoolSelect = document.getElementById(`child${childIndex}School`);
+            const otherSchoolInput = document.getElementById(`child${childIndex}OtherSchool`);
+            if (schoolSelect.value === 'other') {
+                otherSchoolInput.style.display = 'block';
+            } else {
+                otherSchoolInput.style.display = 'none';
+            }
         }
 
         function updateCost() {
@@ -297,6 +330,7 @@
             }
 
             document.getElementById('totalCost').innerText = totalCost.toFixed(2);
+            document.getElementById('hiddenTotalCost').value = totalCost.toFixed(2);
         }
     </script>
 </body>
