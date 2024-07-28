@@ -55,6 +55,7 @@
         }
         .child-form-header h3 {
             margin: 0;
+            flex: 0 0 100px; /* Give more space to prevent wrapping */
         }
         .child-form-row {
             display: flex;
@@ -116,11 +117,6 @@
             <label for="parentPhone">Parent or guardian phone numbers:</label>
             <input type="tel" id="parentPhone" name="parentPhone" required><br>
 
-            <div id="childrenForms"></div>
-
-            <label for="numChildren">Number of children:</label>
-            <input type="number" id="numChildren" name="numChildren" min="1" required><br>
-
             <label for="agreeCodeOfConduct">I agree to the <a href="https://bit.ly/machzikei-bus-code-of-conduct" target="_blank">bus code of conduct</a> and will discuss it with my children:</label>
             <select id="agreeCodeOfConduct" name="agreeCodeOfConduct" required>
                 <option value="">-- Please select --</option>
@@ -135,6 +131,11 @@
                 <option value="monthlyInstallments">I'll use the online form to pay in monthly installments by credit card</option>
                 <option value="contactOffice">Ask the shul office to contact me to set up another means of payment</option>
             </select><br>
+
+            <label for="numChildren">Number of children:</label>
+            <input type="number" id="numChildren" name="numChildren" min="1" required><br>
+
+            <div id="childrenForms"></div>
 
             <div id="costEstimation">
                 <p>Total Cost: $<span id="totalCost">500</span></p>
@@ -186,23 +187,23 @@
                             </select>
                         </div>
                         <div>
-                            <label for="child${i}TimeType">Full/Part time:</label>
-                            <select id="child${i}TimeType" name="child${i}TimeType" onchange="toggleRidingTimes(${i}); updateCostEstimation();" required>
+                            <label for="child${i}TimeType">Full time or part time:</label>
+                            <select id="child${i}TimeType" name="child${i}TimeType" onchange="toggleRidingTimes(${i})" required>
                                 <option value="">-- Please select --</option>
-                                <option value="fullTime">Full time</option>
-                                <option value="partTime">Part time</option>
+                                <option value="fullTime">Full Time</option>
+                                <option value="partTime">Part Time</option>
                             </select>
                         </div>
                         <div>
-                            <label for="child${i}CarSeat">Carseat:</label>
-                            <select id="child${i}CarSeat" name="child${i}CarSeat" required>
+                            <label for="child${i}Carseat">Will the child be in a carseat?</label>
+                            <select id="child${i}Carseat" name="child${i}Carseat" required>
                                 <option value="">-- Please select --</option>
                                 <option value="yes">Yes</option>
                                 <option value="no">No</option>
                             </select>
                         </div>
                         <div>
-                            <label for="child${i}School">School:</label>
+                            <label for="child${i}School">What school will the child attend?</label>
                             <select id="child${i}School" name="child${i}School" required>
                                 <option value="">-- Please select --</option>
                                 <option value="OJCS">OJCS</option>
@@ -211,69 +212,62 @@
                             </select>
                         </div>
                     </div>
-                    <div id="child${i}RidingTimes" class="riding-times">
-                        <p>Select riding times:</p>
+                    <div class="riding-times" id="child${i}RidingTimes">
                         <div class="riding-times-grid">
-                            <div><input type="checkbox" name="child${i}RidingTimes" value="MonAM" onchange="updateCostEstimation()"> Monday AM</div>
-                            <div><input type="checkbox" name="child${i}RidingTimes" value="TueAM" onchange="updateCostEstimation()"> Tuesday AM</div>
-                            <div><input type="checkbox" name="child${i}RidingTimes" value="WedAM" onchange="updateCostEstimation()"> Wednesday AM</div>
-                            <div><input type="checkbox" name="child${i}RidingTimes" value="ThuAM" onchange="updateCostEstimation()"> Thursday AM</div>
-                            <div><input type="checkbox" name="child${i}RidingTimes" value="FriAM" onchange="updateCostEstimation()"> Friday AM</div>
-                            <div><input type="checkbox" name="child${i}RidingTimes" value="MonPM" onchange="updateCostEstimation()"> Monday PM</div>
-                            <div><input type="checkbox" name="child${i}RidingTimes" value="TuePM" onchange="updateCostEstimation()"> Tuesday PM</div>
-                            <div><input type="checkbox" name="child${i}RidingTimes" value="WedPM" onchange="updateCostEstimation()"> Wednesday PM</div>
-                            <div><input type="checkbox" name="child${i}RidingTimes" value="ThuPM" onchange="updateCostEstimation()"> Thursday PM</div>
-                            <div><input type="checkbox" name="child${i}RidingTimes" value="FriPM" onchange="updateCostEstimation()"> Friday PM</div>
+                            <div><input type="checkbox" name="child${i}RidingTimes" value="mondayAM" checked>Monday AM</div>
+                            <div><input type="checkbox" name="child${i}RidingTimes" value="tuesdayAM" checked>Tuesday AM</div>
+                            <div><input type="checkbox" name="child${i}RidingTimes" value="wednesdayAM" checked>Wednesday AM</div>
+                            <div><input type="checkbox" name="child${i}RidingTimes" value="thursdayAM" checked>Thursday AM</div>
+                            <div><input type="checkbox" name="child${i}RidingTimes" value="fridayAM" checked>Friday AM</div>
+                            <div><input type="checkbox" name="child${i}RidingTimes" value="mondayPM" checked>Monday PM</div>
+                            <div><input type="checkbox" name="child${i}RidingTimes" value="tuesdayPM" checked>Tuesday PM</div>
+                            <div><input type="checkbox" name="child${i}RidingTimes" value="wednesdayPM" checked>Wednesday PM</div>
+                            <div><input type="checkbox" name="child${i}RidingTimes" value="thursdayPM" checked>Thursday PM</div>
+                            <div><input type="checkbox" name="child${i}RidingTimes" value="fridayPM" checked>Friday PM</div>
                         </div>
                     </div>
                 `;
                 childrenFormsContainer.appendChild(childForm);
             }
-            updateCostEstimation();
         }
 
         function toggleRidingTimes(childIndex) {
-            const timeType = document.getElementById(`child${childIndex}TimeType`).value;
+            const timeTypeSelect = document.getElementById(`child${childIndex}TimeType`);
             const ridingTimesDiv = document.getElementById(`child${childIndex}RidingTimes`);
-            if (timeType === 'partTime') {
+
+            if (timeTypeSelect.value === 'partTime') {
                 ridingTimesDiv.style.display = 'block';
             } else {
                 ridingTimesDiv.style.display = 'none';
             }
-            updateCostEstimation();
+            calculateCost();
         }
 
-        function updateCostEstimation() {
-            const numChildren = document.getElementById('numChildren').value;
-            let totalCost = 500;
-            let fullTimeCosts = [1200, 1000, 800, 600, 400, 200];
-            let partTimeChildren = [];
-            let fullTimeChildrenCount = 0;
+        document.getElementById('registrationForm').addEventListener('change', calculateCost);
 
+        function calculateCost() {
+            const numChildren = parseInt(document.getElementById('numChildren').value) || 0;
+            let totalCost = 500;
+            const fullTimeRates = [1200, 1000, 800, 600, 400, 200];
+            const partTimeRate = 80;
+
+            let childrenCosts = [];
             for (let i = 1; i <= numChildren; i++) {
-                const timeType = document.getElementById(`child${i}TimeType`).value;
-                if (timeType === 'fullTime') {
-                    fullTimeChildrenCount++;
-                } else if (timeType === 'partTime') {
-                    const ridingTimes = document.querySelectorAll(`#child${i}RidingTimes input[type="checkbox"]:checked`);
-                    partTimeChildren.push(ridingTimes.length / 10);
+                const timeTypeSelect = document.getElementById(`child${i}TimeType`);
+                const ridingTimesDiv = document.getElementById(`child${i}RidingTimes`);
+
+                if (timeTypeSelect.value === 'fullTime') {
+                    childrenCosts.push(fullTimeRates[childrenCosts.length] || 0);
+                } else if (timeTypeSelect.value === 'partTime') {
+                    const checkboxes = ridingTimesDiv.querySelectorAll('input[type="checkbox"]:checked');
+                    const partTimeCost = checkboxes.length * partTimeRate;
+                    childrenCosts.push(partTimeCost);
                 }
             }
 
-            // Calculate cost for full-time children first
-            for (let i = 0; i < fullTimeChildrenCount; i++) {
-                totalCost += fullTimeCosts.shift();
-            }
-
-            // Sort part-time children by descending fraction to apply prorating
-            partTimeChildren.sort((a, b) => b - a);
-
-            // Apply prorated costs to remaining cost slots
-            for (let fraction of partTimeChildren) {
-                totalCost += fraction * fullTimeCosts.shift();
-            }
-
-            document.getElementById('totalCost').innerText = totalCost.toFixed(2);
+            childrenCosts.sort((a, b) => b - a);
+            totalCost += childrenCosts.reduce((acc, cost) => acc + cost, 0);
+            document.getElementById('totalCost').innerText = totalCost;
         }
     </script>
 </body>
