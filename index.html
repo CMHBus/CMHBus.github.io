@@ -55,7 +55,7 @@
         }
         .child-form-header h3 {
             margin: 0;
-            flex: 0 0 100px; /* Give more space to prevent wrapping */
+            flex: 0 0 140px; /* Increased width to prevent wrapping */
         }
         .child-form-row {
             display: flex;
@@ -101,6 +101,9 @@
             font-weight: bold;
             color: #4CAF50;
         }
+        .other-school {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -111,11 +114,22 @@
             <label for="parentName">Your name:</label>
             <input type="text" id="parentName" name="parentName" required><br>
 
-            <label for="parentEmail">Parent or guardian email addresses:</label>
-            <input type="email" id="parentEmail" name="parentEmail" required><br>
+            <label for="parentEmail1">Parent or guardian email addresses:</label>
+            <input type="email" id="parentEmail1" name="parentEmail1" placeholder="Email 1" required>
+            <input type="email" id="parentEmail2" name="parentEmail2" placeholder="Email 2"><br>
 
-            <label for="parentPhone">Parent or guardian phone numbers:</label>
-            <input type="tel" id="parentPhone" name="parentPhone" required><br>
+            <label for="parentPhone1">Parent or guardian phone numbers:</label>
+            <input type="tel" id="parentPhone1" name="parentPhone1" placeholder="Phone number 1" required>
+            <input type="tel" id="parentPhone2" name="parentPhone2" placeholder="Phone number 2"><br>
+
+            <label for="numChildren">Number of children:</label>
+            <input type="number" id="numChildren" name="numChildren" min="1" required><br>
+
+            <div id="childrenForms"></div>
+
+            <div id="costEstimation">
+                <p>Total Cost: $<span id="totalCost">500</span></p>
+            </div>
 
             <label for="agreeCodeOfConduct">I agree to the <a href="https://bit.ly/machzikei-bus-code-of-conduct" target="_blank">bus code of conduct</a> and will discuss it with my children:</label>
             <select id="agreeCodeOfConduct" name="agreeCodeOfConduct" required>
@@ -131,15 +145,6 @@
                 <option value="monthlyInstallments">I'll use the online form to pay in monthly installments by credit card</option>
                 <option value="contactOffice">Ask the shul office to contact me to set up another means of payment</option>
             </select><br>
-
-            <label for="numChildren">Number of children:</label>
-            <input type="number" id="numChildren" name="numChildren" min="1" required><br>
-
-            <div id="childrenForms"></div>
-
-            <div id="costEstimation">
-                <p>Total Cost: $<span id="totalCost">500</span></p>
-            </div>
 
             <button type="submit">Register</button>
         </form>
@@ -204,7 +209,7 @@
                         </div>
                         <div>
                             <label for="child${i}School">What school will the child attend?</label>
-                            <select id="child${i}School" name="child${i}School" required>
+                            <select id="child${i}School" name="child${i}School" onchange="toggleOtherSchool(${i})" required>
                                 <option value="">-- Please select --</option>
                                 <option value="OJCS">OJCS</option>
                                 <option value="TDSO">TDSO</option>
@@ -213,61 +218,72 @@
                         </div>
                     </div>
                     <div class="riding-times" id="child${i}RidingTimes">
+                        <label>Select riding times:</label>
                         <div class="riding-times-grid">
-                            <div><input type="checkbox" name="child${i}RidingTimes" value="mondayAM" checked>Monday AM</div>
-                            <div><input type="checkbox" name="child${i}RidingTimes" value="tuesdayAM" checked>Tuesday AM</div>
-                            <div><input type="checkbox" name="child${i}RidingTimes" value="wednesdayAM" checked>Wednesday AM</div>
-                            <div><input type="checkbox" name="child${i}RidingTimes" value="thursdayAM" checked>Thursday AM</div>
-                            <div><input type="checkbox" name="child${i}RidingTimes" value="fridayAM" checked>Friday AM</div>
-                            <div><input type="checkbox" name="child${i}RidingTimes" value="mondayPM" checked>Monday PM</div>
-                            <div><input type="checkbox" name="child${i}RidingTimes" value="tuesdayPM" checked>Tuesday PM</div>
-                            <div><input type="checkbox" name="child${i}RidingTimes" value="wednesdayPM" checked>Wednesday PM</div>
-                            <div><input type="checkbox" name="child${i}RidingTimes" value="thursdayPM" checked>Thursday PM</div>
-                            <div><input type="checkbox" name="child${i}RidingTimes" value="fridayPM" checked>Friday PM</div>
+                            <label><input type="checkbox" name="child${i}Times[]" value="Monday AM" checked> Monday AM</label>
+                            <label><input type="checkbox" name="child${i}Times[]" value="Tuesday AM" checked> Tuesday AM</label>
+                            <label><input type="checkbox" name="child${i}Times[]" value="Wednesday AM" checked> Wednesday AM</label>
+                            <label><input type="checkbox" name="child${i}Times[]" value="Thursday AM" checked> Thursday AM</label>
+                            <label><input type="checkbox" name="child${i}Times[]" value="Friday AM" checked> Friday AM</label>
+                            <label><input type="checkbox" name="child${i}Times[]" value="Monday PM" checked> Monday PM</label>
+                            <label><input type="checkbox" name="child${i}Times[]" value="Tuesday PM" checked> Tuesday PM</label>
+                            <label><input type="checkbox" name="child${i}Times[]" value="Wednesday PM" checked> Wednesday PM</label>
+                            <label><input type="checkbox" name="child${i}Times[]" value="Thursday PM" checked> Thursday PM</label>
+                            <label><input type="checkbox" name="child${i}Times[]" value="Friday PM" checked> Friday PM</label>
                         </div>
+                    </div>
+                    <div class="other-school" id="child${i}OtherSchool">
+                        <label for="child${i}OtherSchoolText">Please specify:</label>
+                        <input type="text" id="child${i}OtherSchoolText" name="child${i}OtherSchoolText">
                     </div>
                 `;
                 childrenFormsContainer.appendChild(childForm);
             }
+            updateCost();
         }
 
         function toggleRidingTimes(childIndex) {
-            const timeTypeSelect = document.getElementById(`child${childIndex}TimeType`);
-            const ridingTimesDiv = document.getElementById(`child${childIndex}RidingTimes`);
-
-            if (timeTypeSelect.value === 'partTime') {
-                ridingTimesDiv.style.display = 'block';
+            const timeType = document.getElementById(`child${childIndex}TimeType`).value;
+            const ridingTimes = document.getElementById(`child${childIndex}RidingTimes`);
+            if (timeType === 'partTime') {
+                ridingTimes.style.display = 'block';
             } else {
-                ridingTimesDiv.style.display = 'none';
+                ridingTimes.style.display = 'none';
             }
-            calculateCost();
+            updateCost();
         }
 
-        document.getElementById('registrationForm').addEventListener('change', calculateCost);
+        function toggleOtherSchool(childIndex) {
+            const school = document.getElementById(`child${childIndex}School`).value;
+            const otherSchool = document.getElementById(`child${childIndex}OtherSchool`);
+            if (school === 'other') {
+                otherSchool.style.display = 'block';
+            } else {
+                otherSchool.style.display = 'none';
+            }
+        }
 
-        function calculateCost() {
+        document.getElementById('registrationForm').addEventListener('change', updateCost);
+
+        function updateCost() {
             const numChildren = parseInt(document.getElementById('numChildren').value) || 0;
-            let totalCost = 500;
-            const fullTimeRates = [1200, 1000, 800, 600, 400, 200];
-            const partTimeRate = 80;
+            let costs = [500]; // base cost
+            let partTimeRates = [0.8, 0.6, 0.4, 0.2];
 
-            let childrenCosts = [];
             for (let i = 1; i <= numChildren; i++) {
-                const timeTypeSelect = document.getElementById(`child${i}TimeType`);
-                const ridingTimesDiv = document.getElementById(`child${i}RidingTimes`);
-
-                if (timeTypeSelect.value === 'fullTime') {
-                    childrenCosts.push(fullTimeRates[childrenCosts.length] || 0);
-                } else if (timeTypeSelect.value === 'partTime') {
-                    const checkboxes = ridingTimesDiv.querySelectorAll('input[type="checkbox"]:checked');
-                    const partTimeCost = checkboxes.length * partTimeRate;
-                    childrenCosts.push(partTimeCost);
+                const timeType = document.getElementById(`child${i}TimeType`).value;
+                if (timeType === 'fullTime') {
+                    costs.push(1200 - (i > 1 ? (i - 1) * 200 : 0));
+                } else if (timeType === 'partTime') {
+                    const checkboxes = document.querySelectorAll(`#child${i}RidingTimes input[type="checkbox"]:checked`);
+                    const percentage = checkboxes.length / 10;
+                    const rate = partTimeRates.pop() || 0;
+                    costs.push((1200 - (i > 1 ? (i - 1) * 200 : 0)) * rate * percentage);
                 }
             }
 
-            childrenCosts.sort((a, b) => b - a);
-            totalCost += childrenCosts.reduce((acc, cost) => acc + cost, 0);
-            document.getElementById('totalCost').innerText = totalCost;
+            const totalCost = costs.reduce((acc, curr) => acc + curr, 0);
+            document.getElementById('totalCost').textContent = totalCost.toFixed(2);
         }
     </script>
 </body>
