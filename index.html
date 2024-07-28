@@ -67,6 +67,13 @@
             flex: 1;
             min-width: 180px;
         }
+        .email-phone-row {
+            display: flex;
+            gap: 10px;
+        }
+        .email-phone-row > input {
+            width: calc(50% - 10px);
+        }
         .riding-times {
             display: none;
             margin-top: 10px;
@@ -115,12 +122,16 @@
             <input type="text" id="parentName" name="parentName" required><br>
 
             <label for="parentEmail1">Parent or guardian email addresses:</label>
-            <input type="email" id="parentEmail1" name="parentEmail1" placeholder="Email 1" required>
-            <input type="email" id="parentEmail2" name="parentEmail2" placeholder="Email 2"><br>
+            <div class="email-phone-row">
+                <input type="email" id="parentEmail1" name="parentEmail1" placeholder="Email 1" required>
+                <input type="email" id="parentEmail2" name="parentEmail2" placeholder="Email 2">
+            </div>
 
             <label for="parentPhone1">Parent or guardian phone numbers:</label>
-            <input type="tel" id="parentPhone1" name="parentPhone1" placeholder="Phone number 1" required>
-            <input type="tel" id="parentPhone2" name="parentPhone2" placeholder="Phone number 2"><br>
+            <div class="email-phone-row">
+                <input type="tel" id="parentPhone1" name="parentPhone1" placeholder="Phone number 1" required>
+                <input type="tel" id="parentPhone2" name="parentPhone2" placeholder="Phone number 2">
+            </div>
 
             <label for="numChildren">Number of children:</label>
             <input type="number" id="numChildren" name="numChildren" min="1" required><br>
@@ -233,7 +244,7 @@
                         </div>
                     </div>
                     <div class="other-school" id="child${i}OtherSchool">
-                        <label for="child${i}OtherSchoolText">Please specify:</label>
+                        <label for="child${i}OtherSchoolText">Please specify school:</label>
                         <input type="text" id="child${i}OtherSchoolText" name="child${i}OtherSchoolText">
                     </div>
                 `;
@@ -266,25 +277,36 @@
         document.getElementById('registrationForm').addEventListener('change', updateCost);
 
         function updateCost() {
-            const numChildren = parseInt(document.getElementById('numChildren').value) || 0;
-            let costs = [500]; // base cost
-            let partTimeRates = [0.8, 0.6, 0.4, 0.2];
+            const numChildren = document.getElementById('numChildren').value;
+            let totalCost = 500;
+            let fullTimeCosts = [1200, 1000, 800, 600, 400, 200];
+            let partTimeChildren = [];
+            let fullTimeChildrenCount = 0;
 
             for (let i = 1; i <= numChildren; i++) {
                 const timeType = document.getElementById(`child${i}TimeType`).value;
                 if (timeType === 'fullTime') {
-                    costs.push(1200 - (i > 1 ? (i - 1) * 200 : 0));
+                    fullTimeChildrenCount++;
                 } else if (timeType === 'partTime') {
-                    const checkboxes = document.querySelectorAll(`#child${i}RidingTimes input[type="checkbox"]:checked`);
-                    const percentage = checkboxes.length / 10;
-                    const rate = partTimeRates.pop() || 0;
-                    costs.push((1200 - (i > 1 ? (i - 1) * 200 : 0)) * rate * percentage);
+                    const ridingTimes = document.querySelectorAll(`#child${i}RidingTimes input[type="checkbox"]:checked`);
+                    partTimeChildren.push(ridingTimes.length / 10);
                 }
             }
 
-            const totalCost = costs.reduce((acc, curr) => acc + curr, 0);
-            document.getElementById('totalCost').textContent = totalCost.toFixed(2);
-        }
-    </script>
+            // Calculate cost for full-time children first
+            for (let i = 0; i < fullTimeChildrenCount; i++) {
+                totalCost += fullTimeCosts.shift();
+            }
+
+            // Sort part-time children by descending fraction to apply prorating
+            partTimeChildren.sort((a, b) => b - a);
+
+            // Apply prorated costs to remaining cost slots
+            for (let fraction of partTimeChildren) {
+                totalCost += fraction * fullTimeCosts.shift();
+            }
+
+            document.getElementById('totalCost').innerText = totalCost.toFixed(2);
+        }    </script>
 </body>
 </html>
