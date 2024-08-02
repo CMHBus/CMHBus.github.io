@@ -343,8 +343,8 @@
 
         function updateCost() {
             const numChildren = document.getElementById('numChildren').value;
-            let totalCost = 500;
-            let fullTimeCosts = [1200, 1000, 800, 600, 400, 200, 0];
+            let totalCost = 600;
+            let fullTimeCosts = [1200, 900, 800, 600, 400, 200, 0];
             let partTimeChildren = [];
             let fullTimeChildrenCount = 0;
 
@@ -375,13 +375,11 @@
             document.getElementById('hiddenTotalCost').value = totalCost.toFixed(2);
             
             // Calculate Tax Receipt 2024
-		    let taxReceipt2024 = 0;
-		    for (let i = 0; i < fullTimeChildrenCount; i++) {
-		        taxReceipt2024 += 1083;
-		    }
-		    for (let fraction of partTimeChildren) {
-		        taxReceipt2024 += fraction * 1083;
-		    }
+		    let taxReceipt2024 = fullTimeChildrenCount*1083;
+		    //for (let fraction of partTimeChildren) {
+		    //    taxReceipt2024 += fraction * 1083;
+		    //}
+		    
 		    taxReceipt2024 = totalCost - taxReceipt2024;
 		    taxReceipt2024 = Math.max(taxReceipt2024, 0);
 		
