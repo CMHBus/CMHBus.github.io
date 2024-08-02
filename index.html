@@ -170,20 +170,9 @@
 
                    
 			 <div id="costEstimation">
-			    <p>Total Cost: $<span id="totalCost">500</span></p>
-			</div>
-			 <div id="taxReceipt2024">
-			    <p>Tax Reciept 2024: $<span id="taxReceipt2024">0</span></p>
-			</div>
-			 <div id="taxReceipt2025">
-			    <p>Tax Reciept 2025: $<span id="taxReceipt2025">0</span></p>
+			    <p>Total Cost: $<span id="totalCost">600</span></p>
 			</div>
 
-			
-			
-			<input type="hidden" id="hiddenTotalCost" name="totalCost" value="500">
-			<input type="hidden" id="hiddenTaxReceipt2024" name="taxReceipt2024" value="0">
-			<input type="hidden" id="hiddenTaxReceipt2025" name="taxReceipt2025" value="0">
 			
 			<hr>
 			
@@ -219,6 +208,19 @@
                 <option value="monthlyInstallments">I'll use the online form to pay in monthly installments by credit card</option>
                 <option value="contactOffice">Ask the shul office to contact me to set up another means of payment</option>
             </select><br>
+
+			 <div id="taxReceipt2024">
+			    <p>Tax Reciept 2024: $<span id="taxReceipt2024">0</span></p>
+			</div>
+			 <div id="taxReceipt2025">
+			    <p>Tax Reciept 2025: $<span id="taxReceipt2025">0</span></p>
+			</div>
+
+			
+			
+			<input type="hidden" id="hiddenTotalCost" name="totalCost" value="500">
+			<input type="hidden" id="hiddenTaxReceipt2024" name="taxReceipt2024" value="0">
+			<input type="hidden" id="hiddenTaxReceipt2025" name="taxReceipt2025" value="0">
 
             <button type="submit">Register</button>
         </form>
@@ -342,54 +344,55 @@
         }
 
         function updateCost() {
-            const numChildren = document.getElementById('numChildren').value;
-            let totalCost = 600;
-            let fullTimeCosts = [1200, 900, 800, 600, 400, 200, 0];
-            let partTimeChildren = [];
-            let fullTimeChildrenCount = 0;
-
-            for (let i = 1; i <= numChildren; i++) {
-                const timeType = document.getElementById(`child${i}TimeType`).value;
-                if (timeType === 'fullTime') {
-                    fullTimeChildrenCount++;
-                } else if (timeType === 'partTime') {
-                    const ridingTimes = document.querySelectorAll(`#child${i}RidingTimes input[type="checkbox"]:checked`);
-                    partTimeChildren.push(ridingTimes.length / 10);
-                }
-            }
-
-            // Calculate cost for full-time children first
-            for (let i = 0; i < fullTimeChildrenCount; i++) {
-                totalCost += fullTimeCosts.shift();
-            }
-
-            // Sort part-time children by descending fraction to apply prorating
-            partTimeChildren.sort((a, b) => b - a);
-
-            // Apply prorated costs to remaining cost slots
-            for (let fraction of partTimeChildren) {
-                totalCost += fraction * fullTimeCosts.shift();
-            }
-
-            document.getElementById('totalCost').innerText = totalCost.toFixed(2);
-            document.getElementById('hiddenTotalCost').value = totalCost.toFixed(2);
-            
-            // Calculate Tax Receipt 2024
-		    let taxReceipt2024 = fullTimeChildrenCount*1083;
-		    //for (let fraction of partTimeChildren) {
-		    //    taxReceipt2024 += fraction * 1083;
-		    //}
-		    
-		    taxReceipt2024 = totalCost - taxReceipt2024;
-		    taxReceipt2024 = Math.max(taxReceipt2024, 0);
+		    const numChildren = document.getElementById('numChildren').value;
+		    let totalCost = 600; // Initial base cost
+		    let fullTimeCosts = [1200, 1000, 800, 600, 400, 200];
+		    let partTimeChildren = [];
+		    let fullTimeChildrenCount = 0;
+		    const baseRate = 1083;
+		    let taxReceipt2024 = 0;
 		
-		    document.getElementById('taxReceipt2024').value = taxReceipt2024.toFixed(2);
-		    document.getElementById('taxReceipt2025').value = "0"; // Set Tax Receipt 2025 to 0 for now
+		    for (let i = 0; i < numChildren; i++) {
+		        const timeType = document.getElementById(`child${i + 1}TimeType`).value;
+		        if (timeType === 'fullTime') {
+		            fullTimeChildrenCount++;
+		        } else if (timeType === 'partTime') {
+		            const ridingTimes = document.querySelectorAll(`#child${i + 1}RidingTimes input[type="checkbox"]:checked`);
+		            partTimeChildren.push(ridingTimes.length / 10); // assuming ridingTimes.length / 10 gives the fraction
+		        }
+		    }
+		
+		    // Apply full-time costs
+		    for (let i = 0; i < fullTimeChildrenCount; i++) {
+		        if (fullTimeCosts.length > 0) {
+		            totalCost += fullTimeCosts.shift();
+		        }
+		    }
+		
+		    // Apply part-time prorated costs
+		    partTimeChildren.sort((a, b) => b - a);
+		    for (let fraction of partTimeChildren) {
+		        if (fullTimeCosts.length > 0) {
+		            totalCost += fraction * fullTimeCosts.shift();
+		        }
+		    }
+		
+		    console.log('Total Cost:', totalCost);
+		
+		    // Calculate the Tax Receipt for 2024
+		    taxReceipt2024 = Math.max(totalCost - (baseRate * numChildren), 0);
+		
+		    console.log('Base Rate * Num Children:', baseRate * numChildren);
+		    console.log('Tax Receipt 2024:', taxReceipt2024);
+		
+		    // Update the hidden fields and display the results
+		    document.getElementById('totalCost').innerText = totalCost.toFixed(2);
+		    document.getElementById('hiddenTotalCost').value = totalCost.toFixed(2);
 		    document.getElementById('hiddenTaxReceipt2024').value = taxReceipt2024.toFixed(2);
-		    document.getElementById('hiddenTaxReceipt2025').value = "0"; // Set Tax Receipt 2025 to 0 for now
-            
-            
-        }
+		    document.getElementById('hiddenTaxReceipt2025').value = 0; // Currently set to zero
+		    document.getElementById('taxReceipt2024').value = taxReceipt2024.toFixed(2);
+		    document.getElementById('taxReceipt2025').value = 0; // Currently set to zero
+		}
     </script>
 </body>
 </html>
