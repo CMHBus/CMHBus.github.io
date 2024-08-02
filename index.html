@@ -210,15 +210,15 @@
             </select><br>
 
 			 <div id="taxReceipt2024">
-			    <p>Tax Reciept 2024: $<span id="taxReceipt2024">0</span></p>
+			    <p>Estimated tax Reciept 2024: $<span id="taxReceipt2024">0</span></p>
 			</div>
 			 <div id="taxReceipt2025">
-			    <p>Tax Reciept 2025: $<span id="taxReceipt2025">0</span></p>
+			    <p>Estimated tax Reciept 2025: $<span id="taxReceipt2025">0</span></p>
 			</div>
 
 			
 			
-			<input type="hidden" id="hiddenTotalCost" name="totalCost" value="500">
+			<input type="hidden" id="hiddenTotalCost" name="totalCost" value="600">
 			<input type="hidden" id="hiddenTaxReceipt2024" name="taxReceipt2024" value="0">
 			<input type="hidden" id="hiddenTaxReceipt2025" name="taxReceipt2025" value="0">
 
@@ -382,16 +382,13 @@
 		    // Calculate the Tax Receipt for 2024
 		    taxReceipt2024 = Math.max(totalCost - (baseRate * numChildren), 0);
 		
-		    console.log('Base Rate * Num Children:', baseRate * numChildren);
-		    console.log('Tax Receipt 2024:', taxReceipt2024);
-		
 		    // Update the hidden fields and display the results
 		    document.getElementById('totalCost').innerText = totalCost.toFixed(2);
 		    document.getElementById('hiddenTotalCost').value = totalCost.toFixed(2);
 		    document.getElementById('hiddenTaxReceipt2024').value = taxReceipt2024.toFixed(2);
 		    document.getElementById('hiddenTaxReceipt2025').value = 0; // Currently set to zero
-		    document.getElementById('taxReceipt2024').value = taxReceipt2024.toFixed(2);
-		    document.getElementById('taxReceipt2025').value = 0; // Currently set to zero
+		    document.getElementById('taxReceipt2024').innerText = taxReceipt2024.toFixed(2);
+		    document.getElementById('taxReceipt2025').innerText = 0; // Currently set to zero
 		}
     </script>
 </body>
