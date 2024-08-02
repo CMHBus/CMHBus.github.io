@@ -168,11 +168,38 @@
 
             <div id="childrenForms"></div>
 
-            <div id="costEstimation">
-                <p>Total Cost: $<span id="totalCost">500</span></p>
-            </div>
+                   
+			 <div id="costEstimation">
+			    <p>Total Cost: $<span id="totalCost">500</span></p>
+			</div>
+			 <div id="taxReceipt2024">
+			    <p>Tax Reciept 2024: $<span id="taxReceipt2024">0</span></p>
+			</div>
+			 <div id="taxReceipt2025">
+			    <p>Tax Reciept 2025: $<span id="taxReceipt2025">0</span></p>
+			</div>
 
-            <input type="hidden" id="hiddenTotalCost" name="totalCost" value="500">
+			
+			
+			<input type="hidden" id="hiddenTotalCost" name="totalCost" value="500">
+			<input type="hidden" id="hiddenTaxReceipt2024" name="taxReceipt2024" value="0">
+			<input type="hidden" id="hiddenTaxReceipt2025" name="taxReceipt2025" value="0">
+			
+			<hr>
+			
+			<label for="agreeCodeOfConduct">I agree to the <a href="https://bit.ly/machzikei-bus-code-of-conduct" target="_blank">bus code of conduct</a> and will discuss it with my children:</label>
+			<select id="agreeCodeOfConduct" name="agreeCodeOfConduct" required>
+			    <option value="">-- Please select --</option>
+			    <option value="yes">Yes</option>
+			    <option value="no">No</option>
+			</select><br>
+			
+			<div class="code-of-conduct-acknowledgement">
+			    <p>Please acknowledge the following:</p>
+			    <label><input type="checkbox" name="acknowledgeStaySeated" required> Stay seated: I will remind my child to stay seated with their seatbelt fastened for the entire ride.</label><br>
+			    <label><input type="checkbox" name="acknowledgeLowVolume" required> Low volume: I will remind my child to keep their voice and devices at a quiet level.</label><br>
+			    <label><input type="checkbox" name="acknowledgeBeRespectful" required> Be respectful: I will remind my child to respect the driver, the supervisors, the teachers, and the other students at all times.</label>
+			</div>
 
 <hr> <!-- Added horizontal rule -->
 
@@ -346,6 +373,24 @@
 
             document.getElementById('totalCost').innerText = totalCost.toFixed(2);
             document.getElementById('hiddenTotalCost').value = totalCost.toFixed(2);
+            
+            // Calculate Tax Receipt 2024
+		    let taxReceipt2024 = 0;
+		    for (let i = 0; i < fullTimeChildrenCount; i++) {
+		        taxReceipt2024 += 1083;
+		    }
+		    for (let fraction of partTimeChildren) {
+		        taxReceipt2024 += fraction * 1083;
+		    }
+		    taxReceipt2024 = totalCost - taxReceipt2024;
+		    taxReceipt2024 = Math.max(taxReceipt2024, 0);
+		
+		    document.getElementById('taxReceipt2024').value = taxReceipt2024.toFixed(2);
+		    document.getElementById('taxReceipt2025').value = "0"; // Set Tax Receipt 2025 to 0 for now
+		    document.getElementById('hiddenTaxReceipt2024').value = taxReceipt2024.toFixed(2);
+		    document.getElementById('hiddenTaxReceipt2025').value = "0"; // Set Tax Receipt 2025 to 0 for now
+            
+            
         }
     </script>
 </body>
