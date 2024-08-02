@@ -230,6 +230,9 @@
         document.getElementById('numChildren').addEventListener('input', function () {
             updateChildrenForms();
         });
+        document.getElementById('paymentOptions').addEventListener('change', function () {
+            updateCost();
+        });
 
         function updateChildrenForms() {
             const numChildren = document.getElementById('numChildren').value;
@@ -351,6 +354,7 @@
 		    let fullTimeChildrenCount = 0;
 		    const baseRate = 1083;
 		    let taxReceipt2024 = 0;
+		    let taxReceipt2025 = 0;
 		
 		    for (let i = 0; i < numChildren; i++) {
 		        const timeType = document.getElementById(`child${i + 1}TimeType`).value;
@@ -377,18 +381,21 @@
 		        }
 		    }
 		
-		    console.log('Total Cost:', totalCost);
-		
-		    // Calculate the Tax Receipt for 2024
-		    taxReceipt2024 = Math.max(totalCost - (baseRate * numChildren), 0);
+		    if (paymentOption === 'fullPayment') {
+		        taxReceipt2024 = Math.max(totalCost - (baseRate * 0.4 * numChildren), 0);
+		    } else if (paymentOption === 'monthlyInstallments') {
+		        taxReceipt2024 = Math.max(totalCost * 0.4 - (baseRate * 0.4 * numChildren), 0);
+		        taxReceipt2025 = Math.max(totalCost * 0.6 - (baseRate * 0.6 * numChildren), 0);
+		    }
 		
 		    // Update the hidden fields and display the results
 		    document.getElementById('totalCost').innerText = totalCost.toFixed(2);
 		    document.getElementById('hiddenTotalCost').value = totalCost.toFixed(2);
 		    document.getElementById('hiddenTaxReceipt2024').value = taxReceipt2024.toFixed(2);
-		    document.getElementById('hiddenTaxReceipt2025').value = 0; // Currently set to zero
+		    document.getElementById('hiddenTaxReceipt2025').value = taxReceipt2025.toFixed(2);
 		    document.getElementById('taxReceipt2024').innerText = taxReceipt2024.toFixed(2);
-		    document.getElementById('taxReceipt2025').innerText = 0; // Currently set to zero
+		    document.getElementById('taxReceipt2025').innerText = taxReceipt2025.toFixed(2);
+
 		}
     </script>
 </body>
