@@ -347,6 +347,8 @@
         }
 
         function updateCost() {
+        	const numChildren = parseInt(document.getElementById('numChildren').value, 10);
+    		const paymentOption = document.getElementById('paymentOptions').value;
 		    const numChildren = document.getElementById('numChildren').value;
 		    let totalCost = 600; // Initial base cost
 		    let fullTimeCosts = [1200, 1000, 800, 600, 400, 200];
