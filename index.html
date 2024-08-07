@@ -195,16 +195,15 @@
                 <option value="contactOffice">Ask the shul office to contact me to set up another means of payment</option>
             </select><br>
 
-			 <div id="taxReceipt2024Text">
-			    <p>Estimated tax Reciept 2024: $<span id="taxReceipt2024">0</span></p>
-			</div>
-			 <div id="taxReceipt2025Text">
-			    <p>Estimated tax Reciept 2025: $<span id="taxReceipt2025">0</span></p>
-			</div>
 
 			
 			
 			<input type="hidden" id="hiddenTotalCost" name="totalCost" value="600">
+			<input type="hidden" id="hiddenFTE" name="FTE" value="0">
+			<input type="hidden" id="hiddenAdvantage2024" name="advantage2024" value="0">
+			<input type="hidden" id="hiddenAdvantage2025" name="advantage2025" value="0">
+			<input type="hidden" id="payment2024" name="payment2024" value="0">
+			<input type="hidden" id="payment2025" name="payment2025" value="0">
 			<input type="hidden" id="hiddenTaxReceipt2024" name="taxReceipt2024" value="0">
 			<input type="hidden" id="hiddenTaxReceipt2025" name="taxReceipt2025" value="0">
 
@@ -333,56 +332,75 @@
         }
 
         function updateCost() {
-        	const numChildren = parseInt(document.getElementById('numChildren').value, 10);
-    		const paymentOption = document.getElementById('paymentOptions').value;
+		    const numChildren = parseInt(document.getElementById('numChildren').value, 10);
+		    const paymentOption = document.getElementById('paymentOptions').value;
+		    const baseRate = 943;
+		
 		    let totalCost = 600; // Initial base cost
 		    let fullTimeCosts = [1200, 900, 800, 600, 400, 200];
 		    let partTimeChildren = [];
 		    let fullTimeChildrenCount = 0;
-		    const baseRate = 1083;
+		    let FTE = 0;
 		    let taxReceipt2024 = 0;
 		    let taxReceipt2025 = 0;
+		    let advantage2024 = 0;
+		    let advantage2025 = 0;
+		    let payment2024 = 0;
+		    let payment2025 = 0;
 		
 		    for (let i = 0; i < numChildren; i++) {
 		        const timeType = document.getElementById(`child${i + 1}TimeType`).value;
 		        if (timeType === 'fullTime') {
 		            fullTimeChildrenCount++;
+		            FTE++;
 		        } else if (timeType === 'partTime') {
 		            const ridingTimes = document.querySelectorAll(`#child${i + 1}RidingTimes input[type="checkbox"]:checked`);
-		            partTimeChildren.push(ridingTimes.length / 10); // assuming ridingTimes.length / 10 gives the fraction
+		            let fraction = ridingTimes.length / 10; // assuming ridingTimes.length / 10 gives the fraction
+		            partTimeChildren.push(fraction);
+		            FTE += fraction;
 		        }
 		    }
 		
 		    // Apply full-time costs
+		    fullTimeChildrenCount = Math.min(fullTimeChildrenCount, fullTimeCosts.length);
 		    for (let i = 0; i < fullTimeChildrenCount; i++) {
-		        if (fullTimeCosts.length > 0) {
-		            totalCost += fullTimeCosts.shift();
-		        }
+		        totalCost += fullTimeCosts[i];
 		    }
+		
+		    // Remove applied full-time costs
+		    fullTimeCosts.splice(0, fullTimeChildrenCount);
 		
 		    // Apply part-time prorated costs
 		    partTimeChildren.sort((a, b) => b - a);
-		    for (let fraction of partTimeChildren) {
+		    partTimeChildren.forEach(fraction => {
 		        if (fullTimeCosts.length > 0) {
 		            totalCost += fraction * fullTimeCosts.shift();
 		        }
-		    }
+		    });
+		
+		    advantage2024 = FTE * baseRate * 0.4;
+		    advantage2025 = FTE * baseRate * 0.6;
 		
 		    if (paymentOption === 'fullPayment') {
-		        taxReceipt2024 = Math.max(totalCost - (baseRate * 0.4 * numChildren), 0);
+		        payment2024 = totalCost;
 		    } else if (paymentOption === 'monthlyInstallments') {
-		        taxReceipt2024 = Math.max(totalCost * 0.4 - (baseRate * 0.4 * numChildren), 0);
-		        taxReceipt2025 = Math.max(totalCost * 0.6 - (baseRate * 0.6 * numChildren), 0);
+		        payment2024 = totalCost * 0.4;
+		        payment2025 = totalCost * 0.6;
 		    }
+		
+		    taxReceipt2024 = Math.max(payment2024 - advantage2024, 0);
+		    taxReceipt2025 = Math.max(payment2025 - advantage2025, 0);
 		
 		    // Update the hidden fields and display the results
 		    document.getElementById('totalCost').innerText = totalCost.toFixed(0);
 		    document.getElementById('hiddenTotalCost').value = totalCost.toFixed(0);
+		    document.getElementById('hiddenFTE').value = FTE.toFixed(0);
+		    document.getElementById('hiddenAdvantage2024').value = advantage2024.toFixed(0);
+		    document.getElementById('hiddenAdvantage2025').value = advantage2025.toFixed(0);
+		    document.getElementById('hiddenPayment2024').value = payment2024.toFixed(0);
+		    document.getElementById('hiddenPayment2025').value = payment2025.toFixed(0);
 		    document.getElementById('hiddenTaxReceipt2024').value = taxReceipt2024.toFixed(0);
 		    document.getElementById('hiddenTaxReceipt2025').value = taxReceipt2025.toFixed(0);
-		    document.getElementById('taxReceipt2024').innerText = taxReceipt2024.toFixed(0);
-		    document.getElementById('taxReceipt2025').innerText = taxReceipt2025.toFixed(0);
-
 		}
     </script>
 </body>
