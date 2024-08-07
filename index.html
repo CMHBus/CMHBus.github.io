@@ -140,6 +140,7 @@
         <h1>CMH Bus Registration 2024/2025</h1>
         <p class="intro">Welcome to the CMH Bus Registration for the 2024/2025 school year. Please fill out the form below to register your children for the bus service.</p>
         <p class="intro">Submitting this registration form indicates a commitment to paying for your spot on the bus this year.</p>
+        <p class="intro">The bus exececutive is exploring options to make some of your registration fee eligible for a charitible tax recipet stay tuned for more details.</p>
         <p class="intro">If you are unable to pay the full price or have any questions about the cost, email <a href="mailto:scottship12@gmail.com">scottship12@gmail.com</a>.</p>
         <p class="intro">All pickups and drop-offs this year will be in at Congregation Machzikei Hadas, 2310 Virginia Dr in the parking lot. If you require another location, email <a href="mailto:yjpfeiffer@gmail.com">yjpfeiffer@gmail.com</a>. Additional costs may apply.</p>
         <hr> <!-- Added horizontal rule -->
@@ -401,6 +402,17 @@
 		    document.getElementById('hiddenPayment2025').value = payment2025.toFixed(0);
 		    document.getElementById('hiddenTaxReceipt2024').value = taxReceipt2024.toFixed(0);
 		    document.getElementById('hiddenTaxReceipt2025').value = taxReceipt2025.toFixed(0);
+		    
+		    
+		        // Logging the hidden variables
+		    console.log('Total Cost:', totalCost.toFixed(0));
+		    console.log('FTE:', FTE.toFixed(0));
+		    console.log('Advantage 2024:', advantage2024.toFixed(0));
+		    console.log('Advantage 2025:', advantage2025.toFixed(0));
+		    console.log('Payment 2024:', payment2024.toFixed(0));
+		    console.log('Payment 2025:', payment2025.toFixed(0));
+		    console.log('Tax Receipt 2024:', taxReceipt2024.toFixed(0));
+		    console.log('Tax Receipt 2025:', taxReceipt2025.toFixed(0));
 		}
     </script>
 </body>
