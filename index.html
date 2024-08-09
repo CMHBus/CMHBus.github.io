@@ -400,7 +400,7 @@
 		    // Update the hidden fields and display the results
 		    document.getElementById('totalCost').innerText = totalCost.toFixed(0);
 		    document.getElementById('hiddenTotalCost').value = totalCost.toFixed(0);
-		    document.getElementById('hiddenFTE').value = FTE.toFixed(0);
+		    document.getElementById('hiddenFTE').value = FTE.toFixed(1);
 		    document.getElementById('hiddenAdvantage2024').value = advantage2024.toFixed(0);
 		    document.getElementById('hiddenAdvantage2025').value = advantage2025.toFixed(0);
 		    document.getElementById('hiddenPayment2024').value = payment2024.toFixed(0);
@@ -411,7 +411,7 @@
 		    
 		        // Logging the hidden variables
 		    console.log('Total Cost:', totalCost.toFixed(0));
-		    console.log('FTE:', FTE.toFixed(0));
+		    console.log('FTE:', FTE.toFixed(1));
 		    console.log('Advantage 2024:', advantage2024.toFixed(0));
 		    console.log('Advantage 2025:', advantage2025.toFixed(0));
 		    console.log('Payment 2024:', payment2024.toFixed(0));
