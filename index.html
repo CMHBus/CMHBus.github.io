@@ -228,25 +228,7 @@ function updateChildrenForms() {
                 </div>
                 <div>
                     <label for="child${i}Grade">Grade:</label>
-                    <select id="child${i}Grade" name="child${i}Grade" onchange="toggleCarseat(${i})" required>
-                        <option value="">-- Please select --</option>
-                        <option value="preschool">Preschool</option>
-                        <option value="JK">JK</option>
-                        <option value="SK">SK</option>
-                        <option value="Grade 1">Grade 1</option>
-                        <option value="Grade 2">Grade 2</option>
-                        <option value="Grade 3">Grade 3</option>
-                        <option value="Grade 4">Grade 4</option>
-                        <option value="Grade 5">Grade 5</option>
-                        <option value="Grade 6">Grade 6</option>
-                        <option value="Grade 7">Grade 7</option>
-                        <option value="Grade 8">Grade 8</option>
-                        <option value="Grade 9">Grade 9</option>
-                        <option value="Grade 10">Grade 10</option>
-                        <option value="Grade 11">Grade 11</option>
-                        <option value="Grade 12">Grade 12</option>
-                        <option value="adult">Adult</option>
-                    </select>
+                    <select id="child${i}Grade" name="child${i}Grade" onchange="toggleCarseat(${i})" required></select>
                 </div>
                 <div id="child${i}CarseatDiv">
                     <label for="child${i}Carseat">Will the child be in a carseat?</label>
@@ -282,12 +264,6 @@ function updateChildrenForms() {
             </div>
         `;
         childrenFormsContainer.appendChild(childForm);
-
-        document.getElementById(`child${i}Grade`).addEventListener('change', () => toggleCarseat(i));
-        toggleCarseat(i);
-
-        const checkboxes = childForm.querySelectorAll(`#child${i}RidingTimes input[type="checkbox"]`);
-        checkboxes.forEach(cb => cb.addEventListener('change', updateCost));
     }
     updateCost();
 }
@@ -306,21 +282,75 @@ function toggleCarseat(childIndex) {
 
 function handleTorahHigh(childIndex) {
     const schoolSelect = document.getElementById(`child${childIndex}School`);
+    const gradeSelect = document.getElementById(`child${childIndex}Grade`);
     const timeTypeSelect = document.getElementById(`child${childIndex}TimeType`);
     const ridingTimesDiv = document.getElementById(`child${childIndex}RidingTimes`);
+
+    let gradeOptions = '';
+    if (schoolSelect.value === 'OJCS' || schoolSelect.value === 'TDSO') {
+        gradeOptions = `
+            <option value="">-- Please select --</option>
+            <option value="preschool">Preschool</option>
+            <option value="JK">JK</option>
+            <option value="SK">SK</option>
+            <option value="Grade 1">Grade 1</option>
+            <option value="Grade 2">Grade 2</option>
+            <option value="Grade 3">Grade 3</option>
+            <option value="Grade 4">Grade 4</option>
+            <option value="Grade 5">Grade 5</option>
+            <option value="Grade 6">Grade 6</option>
+            <option value="Grade 7">Grade 7</option>
+            <option value="Grade 8">Grade 8</option>
+        `;
+    } else if (schoolSelect.value === 'TorahHigh') {
+        gradeOptions = `
+            <option value="">-- Please select --</option>
+            <option value="Grade 9">Grade 9</option>
+            <option value="Grade 10">Grade 10</option>
+            <option value="Grade 11">Grade 11</option>
+            <option value="Grade 12">Grade 12</option>
+            <option value="adult">Adult</option>
+        `;
+    } else {
+        gradeOptions = `
+            <option value="">-- Please select --</option>
+            <option value="preschool">Preschool</option>
+            <option value="JK">JK</option>
+            <option value="SK">SK</option>
+            <option value="Grade 1">Grade 1</option>
+            <option value="Grade 2">Grade 2</option>
+            <option value="Grade 3">Grade 3</option>
+            <option value="Grade 4">Grade 4</option>
+            <option value="Grade 5">Grade 5</option>
+            <option value="Grade 6">Grade 6</option>
+            <option value="Grade 7">Grade 7</option>
+            <option value="Grade 8">Grade 8</option>
+            <option value="Grade 9">Grade 9</option>
+            <option value="Grade 10">Grade 10</option>
+            <option value="Grade 11">Grade 11</option>
+            <option value="Grade 12">Grade 12</option>
+            <option value="adult">Adult</option>
+        `;
+    }
+    gradeSelect.innerHTML = gradeOptions;
+    toggleCarseat(childIndex);
 
     if (schoolSelect.value === 'TorahHigh') {
         timeTypeSelect.value = 'partTime';
         ridingTimesDiv.style.display = 'block';
-
         const checkboxes = ridingTimesDiv.querySelectorAll('input[type="checkbox"]');
         checkboxes.forEach(cb => {
             if (cb.value.includes('AM') || cb.value === 'Friday PM') {
                 cb.checked = true;
+                cb.disabled = false;
             } else {
                 cb.checked = false;
+                cb.disabled = true;
             }
         });
+    } else {
+        const checkboxes = ridingTimesDiv.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(cb => cb.disabled = false);
     }
     updateCost();
 }
