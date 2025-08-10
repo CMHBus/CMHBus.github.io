@@ -1,357 +1,360 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CMH Bus Registration 2025/2026</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-            margin: 20px;
-            line-height: 1.6;
-        }
-        .container {
-            max-width: 800px;
-            margin: auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            text-align: center;
-            color: #4CAF50;
-        }
-        p.intro {
-            text-align: center;
-            font-size: 18px;
-        }
-        label {
-            margin-top: 10px;
-            display: block;
-        }
-        .form-row {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .form-row label {
-            flex: 1;
-        }
-        .form-row input[type="text"],
-        .form-row input[type="number"],
-        .form-row input[type="email"],
-        .form-row input[type="tel"],
-        .form-row select {
-            flex: 2;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        input[type="text"],
-        input[type="number"],
-        input[type="email"],
-        input[type="tel"],
-        select {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .child-form {
-            margin-top: 20px;
-            padding: 10px;
-            border-top: 2px solid #ccc;
-        }
-        .child-form-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .child-form-header h3 {
-            margin: 0;
-            flex: 0 0 140px; /* Increased width to prevent wrapping */
-        }
-        .child-form-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            align-items: center;
-        }
-        .child-form-row > div {
-            flex: 1;
-            min-width: 180px;
-        }
-        .email-phone-row {
-            display: flex;
-            gap: 10px;
-        }
-        .email-phone-row > input {
-            width: calc(50% - 10px);
-        }
-        .riding-times {
-            display: none;
-            margin-top: 10px;
-        }
-        .riding-times input[type="checkbox"] {
-            margin-right: 5px;
-        }
-        .riding-times-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-        .riding-times-grid label {
-            display: flex;
-            align-items: center;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        #costEstimation {
-            margin-top: 20px;
-            text-align: right;
-        }
-        #totalCost {
-            font-weight: bold;
-            color: #4CAF50;
-        }
-        .other-school {
-            display: none;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CMH Bus Registration 2025/2026</title>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f9;
+        color: #333;
+        margin: 20px;
+        line-height: 1.6;
+    }
+    .container {
+        max-width: 800px;
+        margin: auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+        text-align: center;
+        color: #4CAF50;
+    }
+    p.intro {
+        text-align: center;
+        font-size: 18px;
+    }
+    label {
+        margin-top: 10px;
+        display: block;
+    }
+    .form-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    .form-row label {
+        flex: 1;
+    }
+    .form-row input[type="text"],
+    .form-row input[type="number"],
+    .form-row input[type="email"],
+    .form-row input[type="tel"],
+    .form-row select {
+        flex: 2;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    input[type="tel"],
+    select {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    .child-form {
+        margin-top: 20px;
+        padding: 10px;
+        border-top: 2px solid #ccc;
+    }
+    .child-form-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .child-form-header h3 {
+        margin: 0;
+        flex: 0 0 140px;
+    }
+    .child-form-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+    }
+    .child-form-row > div {
+        flex: 1;
+        min-width: 180px;
+    }
+    .email-phone-row {
+        display: flex;
+        gap: 10px;
+    }
+    .email-phone-row > input {
+        width: calc(50% - 10px);
+    }
+    .riding-times {
+        display: none;
+        margin-top: 10px;
+    }
+    .riding-times input[type="checkbox"] {
+        margin-right: 5px;
+    }
+    .riding-times-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    .riding-times-grid label {
+        display: flex;
+        align-items: center;
+    }
+    button {
+        width: 100%;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+    button:hover {
+        background-color: #45a049;
+    }
+    #costEstimation {
+        margin-top: 20px;
+        text-align: right;
+    }
+    #totalCost {
+        font-weight: bold;
+        color: #4CAF50;
+    }
+    .other-school {
+        display: none;
+    }
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1>CMH Bus Registration 2025/2026</h1>
-        <p class="intro">Welcome to the CMH Bus Registration for the 2025/2026 school year. Please fill out the form below to register your children for the bus service.</p>
-        <hr> <!-- Added horizontal rule -->
-        <form id="registrationForm" action="https://formspree.io/f/xwpelrve" method="POST">
-            <div class="form-row">
-                <label for="parentName">Your name:</label>
-                <input type="text" id="parentName" name="parentName" required>
-            </div>
-            <label for="parentEmail1">Parent or guardian email addresses:</label>
-            <div class="email-phone-row">
-                <input type="email" id="parentEmail1" name="parentEmail1" placeholder="Email 1" required>
-                <input type="email" id="parentEmail2" name="parentEmail2" placeholder="Email 2">
-            </div>
-
-            <label for="parentPhone1">Parent or guardian phone numbers:</label>
-            <div class="email-phone-row">
-                <input type="tel" id="parentPhone1" name="parentPhone1" placeholder="Phone number 1" required>
-                <input type="tel" id="parentPhone2" name="parentPhone2" placeholder="Phone number 2">
-            </div>
-
-            <div class="form-row">
-                <label for="numChildren">Number of children:</label>
-                <input type="number" id="numChildren" name="numChildren" min="1" required style="width: 60px;">
-                <div style="flex: 1;"></div> <!-- Spacer -->
-            </div>
-
-            <div id="childrenForms"></div>
-
-                   
-			 <div id="costEstimation">
-			    <p>Total Cost: $<span id="totalCost">700</span></p>
-			</div>
-
-
-			<hr> <!-- Added horizontal rule -->
-			
-			<label><input type="checkbox" name="agreeCodeOfConduct">I agree to the <a href="https://bit.ly/machzikei-bus-code-of-conduct" target="_blank">bus code of conduct</a> and will discuss it with my children</label>
-			
-			<div class="code-of-conduct-acknowledgement">
-			    <label><input type="checkbox" name="acknowledgeStaySeated"> <b>Stay seated:</b> I will remind my child to stay seated with their seatbelt fastened for the entire ride.</label>
-			    <label><input type="checkbox" name="acknowledgeLowVolume"> <b>Low volume:</b> I will remind my child to keep their voice and devices at a quiet level.</label>
-			    <label><input type="checkbox" name="acknowledgeBeRespectful"> <b>Be respectful:</b> I will remind my child to respect the driver, the supervisors, the teachers, and the other students at all times.</label>
-			</div>
-			<hr> <!-- Added horizontal rule -->
-
-            <label for="paymentOptions">Payment Options:</label>
-            <select id="paymentOptions" name="paymentOptions" required>
-                <option value="">-- Please select --</option>
-                <option value="fullPayment">I'll eTransfer the full amount to cmhbus@gmail.com (one time payment)</option>
-                <option value="monthlyInstallments">I'll set up monthly eTransfer payments to cmhbus@gmail.com. Payments will be on the 1st day of the month.</option>
-                <option value="other">I'll pay by another means</option>
-            </select><br>
-
-		    <div class="form-row">
-		        <label for="comments">Additional Comments:</label>
-		        <textarea id="comments" name="comments" rows="4" placeholder="Enter any additional comments or special instructions here." style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;"></textarea>
-		    </div>
-		
-		    <button type="submit">Register</button>
-		</form>
+<div class="container">
+<h1>CMH Bus Registration 2025/2026</h1>
+<p class="intro">Welcome to the CMH Bus Registration for the 2025/2026 school year. Please fill out the form below to register your children for the bus service.</p>
+<hr>
+<form id="registrationForm" action="https://formspree.io/f/xwpelrve" method="POST">
+    <div class="form-row">
+        <label for="parentName">Your name:</label>
+        <input type="text" id="parentName" name="parentName" required>
+    </div>
+    <label for="parentEmail1">Parent or guardian email addresses:</label>
+    <div class="email-phone-row">
+        <input type="email" id="parentEmail1" name="parentEmail1" placeholder="Email 1" required>
+        <input type="email" id="parentEmail2" name="parentEmail2" placeholder="Email 2">
     </div>
 
-    <script>
-        document.getElementById('numChildren').addEventListener('input', function () {
-            updateChildrenForms();
-        });
-        document.getElementById('paymentOptions').addEventListener('change', function () {
-            updateCost();
-        });
+    <label for="parentPhone1">Parent or guardian phone numbers:</label>
+    <div class="email-phone-row">
+        <input type="tel" id="parentPhone1" name="parentPhone1" placeholder="Phone number 1" required>
+        <input type="tel" id="parentPhone2" name="parentPhone2" placeholder="Phone number 2">
+    </div>
 
-        function updateChildrenForms() {
-            const numChildren = document.getElementById('numChildren').value;
-            const childrenFormsContainer = document.getElementById('childrenForms');
-            childrenFormsContainer.innerHTML = '';
+    <div class="form-row">
+        <label for="numChildren">Number of children:</label>
+        <input type="number" id="numChildren" name="numChildren" min="1" required style="width: 60px;">
+        <div style="flex: 1;"></div>
+    </div>
 
-            for (let i = 1; i <= numChildren; i++) {
-                const childForm = document.createElement('div');
-                childForm.classList.add('child-form');
-                childForm.innerHTML = `
-                    <div class="child-form-header">
-                        <h3>Child ${i}</h3>
-                        <input type="text" id="child${i}Name" name="child${i}Name" placeholder="Child's name" required>
-                    </div>
-                    <div class="child-form-row">
-					    <div>
-                            <label for="child${i}School">What school will the child attend?</label>
-                            <select id="child${i}School" name="child${i}School" onchange="toggleOtherSchool(${i})" required>
-                                <option value="">-- Please select --</option>
-                                <option value="OJCS">OJCS</option>
-                                <option value="TDSO">TDSO</option>
-								<option value="TDSO">Torah High</option>
-                                <option value="other">Other</option>
-                            </select>
-                            <input type="text" id="child${i}OtherSchool" name="child${i}OtherSchool" class="other-school" placeholder="Please specify school">
-                        </div>
-                        <div>
-                            <label for="child${i}Grade">Grade:</label>
-                            <select id="child${i}Grade" name="child${i}Grade" required>
-                                <option value="">-- Please select --</option>
-                                <option value="preschool">Preschool</option>
-                                <option value="JK">JK</option>
-                                <option value="SK">SK</option>
-                                <option value="Grade 1">Grade 1</option>
-                                <option value="Grade 2">Grade 2</option>
-                                <option value="Grade 3">Grade 3</option>
-                                <option value="Grade 4">Grade 4</option>
-                                <option value="Grade 5">Grade 5</option>
-                                <option value="Grade 6">Grade 6</option>
-                                <option value="Grade 7">Grade 7</option>
-                                <option value="Grade 8">Grade 8</option>
-                                <option value="Grade 9">Grade 9</option>
-                                <option value="Grade 10">Grade 10</option>
-                                <option value="Grade 11">Grade 11</option>
-                                <option value="Grade 12">Grade 12</option>
-                                <option value="adult">Adult</option>
-                            </select>
-                        </div>
-						<div>
-                            <label for="child${i}Carseat">Will the child be in a carseat?</label>
-                            <select id="child${i}Carseat" name="child${i}Carseat" required>
-                                <option value="">-- Please select --</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="child${i}TimeType">Full time or part time:</label>
-                            <select id="child${i}TimeType" name="child${i}TimeType" onchange="toggleRidingTimes(${i})" required>
-                                <option value="">-- Please select --</option>
-                                <option value="fullTime">Full time</option>
-                                <option value="partTime">Part time</option>
-                            </select>
-                        </div>
+    <div id="childrenForms"></div>
 
+    <div id="costEstimation">
+        <p>Total Cost: $<span id="totalCost">700</span></p>
+    </div>
 
-                    </div>
-                    <div id="child${i}RidingTimes" class="riding-times">
-                        <label>Riding times (select all that apply):</label>
-                        <div class="riding-times-grid">
-                            <label><input type="checkbox" name="child${i}RidingTimes" value="Monday AM" checked> Monday AM</label>
-                            <label><input type="checkbox" name="child${i}RidingTimes" value="Monday PM" checked> Monday PM</label>
-                            <label><input type="checkbox" name="child${i}RidingTimes" value="Tuesday AM" checked> Tuesday AM</label>
-                            <label><input type="checkbox" name="child${i}RidingTimes" value="Tuesday PM" checked> Tuesday PM</label>
-                            <label><input type="checkbox" name="child${i}RidingTimes" value="Wednesday AM" checked> Wednesday AM</label>
-                            <label><input type="checkbox" name="child${i}RidingTimes" value="Wednesday PM" checked> Wednesday PM</label>
-                            <label><input type="checkbox" name="child${i}RidingTimes" value="Thursday AM" checked> Thursday AM</label>
-                            <label><input type="checkbox" name="child${i}RidingTimes" value="Thursday PM" checked> Thursday PM</label>
-                            <label><input type="checkbox" name="child${i}RidingTimes" value="Friday AM" checked> Friday AM</label>
-                            <label><input type="checkbox" name="child${i}RidingTimes" value="Friday PM" checked> Friday PM</label>
-                        </div>
-                    </div>
-                `;
-                childrenFormsContainer.appendChild(childForm);
+    <hr>
 
-                // Add event listeners to checkboxes
-                const checkboxes = childForm.querySelectorAll(`#child${i}RidingTimes input[type="checkbox"]`);
-                checkboxes.forEach(checkbox => {
-                    checkbox.addEventListener('change', updateCost);
-                });
-            }
-            updateCost();
-        }
+    <label><input type="checkbox" name="agreeCodeOfConduct">I agree to the <a href="https://bit.ly/machzikei-bus-code-of-conduct" target="_blank">bus code of conduct</a> and will discuss it with my children</label>
 
-        function toggleRidingTimes(childIndex) {
-            const timeType = document.getElementById(`child${childIndex}TimeType`).value;
-            const ridingTimes = document.getElementById(`child${childIndex}RidingTimes`);
-            if (timeType === 'partTime') {
-                ridingTimes.style.display = 'block';
+    <div class="code-of-conduct-acknowledgement">
+        <label><input type="checkbox" name="acknowledgeStaySeated"> <b>Stay seated:</b> I will remind my child to stay seated with their seatbelt fastened for the entire ride.</label>
+        <label><input type="checkbox" name="acknowledgeLowVolume"> <b>Low volume:</b> I will remind my child to keep their voice and devices at a quiet level.</label>
+        <label><input type="checkbox" name="acknowledgeBeRespectful"> <b>Be respectful:</b> I will remind my child to respect the driver, the supervisors, the teachers, and the other students at all times.</label>
+    </div>
+    <hr>
+
+    <label for="paymentOptions">Payment Options:</label>
+    <select id="paymentOptions" name="paymentOptions" required>
+        <option value="">-- Please select --</option>
+        <option value="fullPayment">I'll eTransfer the full amount to cmhbus@gmail.com (one time payment)</option>
+        <option value="monthlyInstallments">I'll set up monthly eTransfer payments to cmhbus@gmail.com. Payments will be on the 1st day of the month.</option>
+        <option value="other">I'll pay by another means</option>
+    </select><br>
+
+    <div class="form-row">
+        <label for="comments">Additional Comments:</label>
+        <textarea id="comments" name="comments" rows="4" placeholder="Enter any additional comments or special instructions here." style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;"></textarea>
+    </div>
+
+    <button type="submit">Register</button>
+</form>
+</div>
+
+<script>
+document.getElementById('numChildren').addEventListener('input', updateChildrenForms);
+document.getElementById('paymentOptions').addEventListener('change', updateCost);
+
+function updateChildrenForms() {
+    const numChildren = document.getElementById('numChildren').value;
+    const childrenFormsContainer = document.getElementById('childrenForms');
+    childrenFormsContainer.innerHTML = '';
+
+    for (let i = 1; i <= numChildren; i++) {
+        const childForm = document.createElement('div');
+        childForm.classList.add('child-form');
+        childForm.innerHTML = `
+            <div class="child-form-header">
+                <h3>Child ${i}</h3>
+                <input type="text" id="child${i}Name" name="child${i}Name" placeholder="Child's name" required>
+            </div>
+            <div class="child-form-row">
+                <div>
+                    <label for="child${i}School">What school will the child attend?</label>
+                    <select id="child${i}School" name="child${i}School" onchange="toggleOtherSchool(${i}); handleTorahHigh(${i});" required>
+                        <option value="">-- Please select --</option>
+                        <option value="OJCS">OJCS</option>
+                        <option value="TDSO">TDSO</option>
+                        <option value="TorahHigh">Torah High</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <input type="text" id="child${i}OtherSchool" name="child${i}OtherSchool" class="other-school" placeholder="Please specify school">
+                </div>
+                <div>
+                    <label for="child${i}Grade">Grade:</label>
+                    <select id="child${i}Grade" name="child${i}Grade" onchange="toggleCarseat(${i})" required>
+                        <option value="">-- Please select --</option>
+                        <option value="preschool">Preschool</option>
+                        <option value="JK">JK</option>
+                        <option value="SK">SK</option>
+                        <option value="Grade 1">Grade 1</option>
+                        <option value="Grade 2">Grade 2</option>
+                        <option value="Grade 3">Grade 3</option>
+                        <option value="Grade 4">Grade 4</option>
+                        <option value="Grade 5">Grade 5</option>
+                        <option value="Grade 6">Grade 6</option>
+                        <option value="Grade 7">Grade 7</option>
+                        <option value="Grade 8">Grade 8</option>
+                        <option value="Grade 9">Grade 9</option>
+                        <option value="Grade 10">Grade 10</option>
+                        <option value="Grade 11">Grade 11</option>
+                        <option value="Grade 12">Grade 12</option>
+                        <option value="adult">Adult</option>
+                    </select>
+                </div>
+                <div id="child${i}CarseatDiv">
+                    <label for="child${i}Carseat">Will the child be in a carseat?</label>
+                    <select id="child${i}Carseat" name="child${i}Carseat" required>
+                        <option value="">-- Please select --</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="child${i}TimeType">Full time or part time:</label>
+                    <select id="child${i}TimeType" name="child${i}TimeType" onchange="toggleRidingTimes(${i})" required>
+                        <option value="">-- Please select --</option>
+                        <option value="fullTime">Full time</option>
+                        <option value="partTime">Part time</option>
+                    </select>
+                </div>
+            </div>
+            <div id="child${i}RidingTimes" class="riding-times">
+                <label>Riding times (select all that apply):</label>
+                <div class="riding-times-grid">
+                    <label><input type="checkbox" name="child${i}RidingTimes" value="Monday AM" checked> Monday AM</label>
+                    <label><input type="checkbox" name="child${i}RidingTimes" value="Monday PM" checked> Monday PM</label>
+                    <label><input type="checkbox" name="child${i}RidingTimes" value="Tuesday AM" checked> Tuesday AM</label>
+                    <label><input type="checkbox" name="child${i}RidingTimes" value="Tuesday PM" checked> Tuesday PM</label>
+                    <label><input type="checkbox" name="child${i}RidingTimes" value="Wednesday AM" checked> Wednesday AM</label>
+                    <label><input type="checkbox" name="child${i}RidingTimes" value="Wednesday PM" checked> Wednesday PM</label>
+                    <label><input type="checkbox" name="child${i}RidingTimes" value="Thursday AM" checked> Thursday AM</label>
+                    <label><input type="checkbox" name="child${i}RidingTimes" value="Thursday PM" checked> Thursday PM</label>
+                    <label><input type="checkbox" name="child${i}RidingTimes" value="Friday AM" checked> Friday AM</label>
+                    <label><input type="checkbox" name="child${i}RidingTimes" value="Friday PM" checked> Friday PM</label>
+                </div>
+            </div>
+        `;
+        childrenFormsContainer.appendChild(childForm);
+
+        document.getElementById(`child${i}Grade`).addEventListener('change', () => toggleCarseat(i));
+        toggleCarseat(i);
+
+        const checkboxes = childForm.querySelectorAll(`#child${i}RidingTimes input[type="checkbox"]`);
+        checkboxes.forEach(cb => cb.addEventListener('change', updateCost));
+    }
+    updateCost();
+}
+
+function toggleCarseat(childIndex) {
+    const grade = document.getElementById(`child${childIndex}Grade`).value;
+    const carseatDiv = document.getElementById(`child${childIndex}CarseatDiv`);
+    const carseatSelect = document.getElementById(`child${childIndex}Carseat`);
+    if (["preschool", "JK", "SK", "Grade 1"].includes(grade)) {
+        carseatDiv.style.display = 'block';
+    } else {
+        carseatDiv.style.display = 'none';
+        carseatSelect.value = 'no';
+    }
+}
+
+function handleTorahHigh(childIndex) {
+    const schoolSelect = document.getElementById(`child${childIndex}School`);
+    const timeTypeSelect = document.getElementById(`child${childIndex}TimeType`);
+    const ridingTimesDiv = document.getElementById(`child${childIndex}RidingTimes`);
+
+    if (schoolSelect.value === 'TorahHigh') {
+        timeTypeSelect.value = 'partTime';
+        ridingTimesDiv.style.display = 'block';
+
+        const checkboxes = ridingTimesDiv.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(cb => {
+            if (cb.value.includes('AM') || cb.value === 'Friday PM') {
+                cb.checked = true;
             } else {
-                ridingTimes.style.display = 'none';
+                cb.checked = false;
             }
-            updateCost();
+        });
+    }
+    updateCost();
+}
+
+function toggleRidingTimes(childIndex) {
+    const timeType = document.getElementById(`child${childIndex}TimeType`).value;
+    const ridingTimes = document.getElementById(`child${childIndex}RidingTimes`);
+    ridingTimes.style.display = (timeType === 'partTime') ? 'block' : 'none';
+    updateCost();
+}
+
+function toggleOtherSchool(childIndex) {
+    const schoolSelect = document.getElementById(`child${childIndex}School`);
+    const otherSchoolInput = document.getElementById(`child${childIndex}OtherSchool`);
+    otherSchoolInput.style.display = (schoolSelect.value === 'other') ? 'block' : 'none';
+}
+
+function updateCost() {
+    const numChildren = parseInt(document.getElementById('numChildren').value, 10);
+    let a = -100, b = 1300, c = 700, FTE = 0;
+
+    for (let i = 0; i < numChildren; i++) {
+        const timeType = document.getElementById(`child${i + 1}TimeType`).value;
+        if (timeType === 'fullTime') {
+            FTE++;
+        } else if (timeType === 'partTime') {
+            const ridingTimes = document.querySelectorAll(`#child${i + 1}RidingTimes input[type="checkbox"]:checked`);
+            let fraction = ridingTimes.length / 10;
+            FTE += fraction;
         }
-
-        function toggleOtherSchool(childIndex) {
-            const schoolSelect = document.getElementById(`child${childIndex}School`);
-            const otherSchoolInput = document.getElementById(`child${childIndex}OtherSchool`);
-            if (schoolSelect.value === 'other') {
-                otherSchoolInput.style.display = 'block';
-            } else {
-                otherSchoolInput.style.display = 'none';
-            }
-        }
-
-        function updateCost() {
-		    const numChildren = parseInt(document.getElementById('numChildren').value, 10);
-		    const paymentOption = document.getElementById('paymentOptions').value;
-		
-		    let a= -100;
-			let b=1300;
-			let c=700;
-		    let FTE = 0;
-			let totalCost=0;
-		
-		    for (let i = 0; i < numChildren; i++) {
-		        const timeType = document.getElementById(`child${i + 1}TimeType`).value;
-		        if (timeType === 'fullTime') {
-		            FTE++;
-		        } else if (timeType === 'partTime') {
-		            const ridingTimes = document.querySelectorAll(`#child${i + 1}RidingTimes input[type="checkbox"]:checked`);
-		            let fraction = ridingTimes.length / 10; // assuming ridingTimes.length / 10 gives the fraction
-		            FTE += fraction;
-		        }
-		    }
-		
-		    totalCost = a*FTE*FTE+b*FTE+c;
-			
-		    // Logging the hidden variables
-		    console.log('Total Cost:', totalCost.toFixed(0));
-		    console.log('FTE:', FTE.toFixed(1));
-		    // Update the hidden fields and display the results
-		    document.getElementById('totalCost').innerText = totalCost.toFixed(0);
-
-
-		}
-    </script>
+    }
+    const totalCost = a * FTE * FTE + b * FTE + c;
+    document.getElementById('totalCost').innerText = totalCost.toFixed(0);
+}
+</script>
 </body>
 </html>
