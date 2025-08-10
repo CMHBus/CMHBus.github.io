@@ -145,7 +145,7 @@
     In the afternoon, it will leave OJCS at <b>3:55pm</b>, pick up at TDSO at <b>4:05pm</b>, and return to CMH around <b>4:40pm</b>.<br><br>
     <b>Costs:</b> Fees have increased about 5%. The calculation is shown below.<br><br>
     <b>Payments:</b> All payments will be made via eTransfer to <b>cmhbus@gmail.com</b>.<br>
-    - If paid <b>in full before September 1</b>, you’ll receive a <b>2% discount</b>.<br>
+    - If paid <b>in full before September 1</b>, you'll receive a <b>2% discount</b>.<br>
     - If paid monthly, please send <b>10 payments</b> on the <b>1st day of each month</b> from September to June.<br><br>
     <b>Good news:</b> We expect to have enough seats for everyone — no more waitlist!
 </p>
@@ -247,7 +247,7 @@ function updateChildrenForms() {
                         <option value="no">No</option>
                     </select>
                 </div>
-                <div>
+                <div id="child${i}TimeTypeDiv">
                     <label for="child${i}TimeType">Full time or part time:</label>
                     <select id="child${i}TimeType" name="child${i}TimeType" onchange="toggleRidingTimes(${i})" required>
                         <option value="">-- Please select --</option>
@@ -300,6 +300,7 @@ function handleTorahHigh(childIndex) {
     const schoolSelect = document.getElementById(`child${childIndex}School`);
     const gradeSelect = document.getElementById(`child${childIndex}Grade`);
     const timeTypeSelect = document.getElementById(`child${childIndex}TimeType`);
+    const timeTypeDiv = document.getElementById(`child${childIndex}TimeTypeDiv`);
     const ridingTimesDiv = document.getElementById(`child${childIndex}RidingTimes`);
 
     let gradeOptions = '';
@@ -352,6 +353,8 @@ function handleTorahHigh(childIndex) {
     toggleCarseat(childIndex);
 
     if (schoolSelect.value === 'TorahHigh') {
+        // Hide the full/part time selector and automatically set to part time
+        timeTypeDiv.style.display = 'none';
         timeTypeSelect.value = 'partTime';
         ridingTimesDiv.style.display = 'block';
         const checkboxes = ridingTimesDiv.querySelectorAll('input[type="checkbox"]');
@@ -365,6 +368,8 @@ function handleTorahHigh(childIndex) {
             }
         });
     } else {
+        // Show the full/part time selector for other schools
+        timeTypeDiv.style.display = 'block';
         const checkboxes = ridingTimesDiv.querySelectorAll('input[type="checkbox"]');
         checkboxes.forEach(cb => cb.disabled = false);
     }
@@ -386,23 +391,44 @@ function toggleOtherSchool(childIndex) {
 
 function updateCost() {
     const numChildren = parseInt(document.getElementById('numChildren').value, 10);
+    
+    // Return early if no children specified
+    if (isNaN(numChildren) || numChildren <= 0) {
+        document.getElementById('totalCost').innerText = '0';
+        return;
+    }
+
     let a = -100, b = 1300, c = 700, FTE = 0;
 
-    for (let i = 0; i < numChildren; i++) {
-        const timeType = document.getElementById(`child${i + 1}TimeType`).value;
+    // Fixed loop: iterate from 1 to numChildren (inclusive)
+    for (let i = 1; i <= numChildren; i++) {
+        const timeTypeElement = document.getElementById(`child${i}TimeType`);
+        
+        // Check if element exists before accessing its value
+        if (!timeTypeElement) {
+            continue; // Skip this iteration if element doesn't exist yet
+        }
+        
+        const timeType = timeTypeElement.value;
+        
         if (timeType === 'fullTime') {
             FTE++;
         } else if (timeType === 'partTime') {
-            const ridingTimes = document.querySelectorAll(`#child${i + 1}RidingTimes input[type="checkbox"]:checked`);
+            const ridingTimes = document.querySelectorAll(`#child${i}RidingTimes input[type="checkbox"]:checked`);
             let fraction = ridingTimes.length / 10;
             FTE += fraction;
         }
     }
+    
     let totalCost = a * FTE * FTE + b * FTE + c;
-    if (document.getElementById('paymentOptions').value === 'fullPayment') {
+    
+    // Apply discount if full payment is selected
+    const paymentOptions = document.getElementById('paymentOptions');
+    if (paymentOptions && paymentOptions.value === 'fullPayment') {
         totalCost *= 0.98;
     }
-    document.getElementById('totalCost').innerText = totalCost.toFixed(0);
+    
+    document.getElementById('totalCost').innerText = Math.max(0, totalCost).toFixed(0);
 }
 </script>
 </body>
