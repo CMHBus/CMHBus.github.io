@@ -341,13 +341,14 @@
 		    }
 		
 		    totalCost = a*FTE*FTE+b*FTE+c;
-
+			
+		    // Logging the hidden variables
+		    console.log('Total Cost:', totalCost.toFixed(0));
+		    console.log('FTE:', FTE.toFixed(1));
 		    // Update the hidden fields and display the results
 		    document.getElementById('totalCost').innerText = totalCost.toFixed(0);
 
-		        // Logging the hidden variables
-		    console.log('Total Cost:', totalCost.toFixed(0));
-		    console.log('FTE:', FTE.toFixed(1));
+
 		}
     </script>
 </body>
