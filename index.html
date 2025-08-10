@@ -170,8 +170,6 @@
 			    <p>Total Cost: $<span id="totalCost">700</span></p>
 			</div>
 
-			
-			
 
 			<hr> <!-- Added horizontal rule -->
 			
@@ -191,18 +189,6 @@
                 <option value="monthlyInstallments">I'll set up monthly eTransfer payments to cmhbus@gmail.com. Payments will be on the 1st day of the month.</option>
                 <option value="other">I'll pay by another means</option>
             </select><br>
-
-
-			
-			
-			<input type="hidden" id="hiddenTotalCost" name="totalCost" value="600">
-			<input type="hidden" id="hiddenFTE" name="FTE" value="0">
-			<input type="hidden" id="hiddenAdvantage2024" name="advantage2024" value="0">
-			<input type="hidden" id="hiddenAdvantage2025" name="advantage2025" value="0">
-			<input type="hidden" id="hiddenPayment2024" name="payment2024" value="0">
-			<input type="hidden" id="hiddenPayment2025" name="payment2025" value="0">
-			<input type="hidden" id="hiddenTaxReceipt2024" name="taxReceipt2024" value="0">
-			<input type="hidden" id="hiddenTaxReceipt2025" name="taxReceipt2025" value="0">
 
 		    <div class="form-row">
 		        <label for="comments">Additional Comments:</label>
@@ -309,7 +295,6 @@
                     checkbox.addEventListener('change', updateCost);
                 });
             }
-
             updateCost();
         }
 
@@ -358,8 +343,6 @@
 
 		    // Update the hidden fields and display the results
 		    document.getElementById('totalCost').innerText = totalCost.toFixed(0);
-		    document.getElementById('hiddenTotalCost').value = totalCost.toFixed(0);
-		    document.getElementById('hiddenFTE').value = FTE.toFixed(1);
 
 		        // Logging the hidden variables
 		    console.log('Total Cost:', totalCost.toFixed(0));
