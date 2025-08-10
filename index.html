@@ -221,6 +221,17 @@
                         <input type="text" id="child${i}Name" name="child${i}Name" placeholder="Child's name" required>
                     </div>
                     <div class="child-form-row">
+					    <div>
+                            <label for="child${i}School">What school will the child attend?</label>
+                            <select id="child${i}School" name="child${i}School" onchange="toggleOtherSchool(${i})" required>
+                                <option value="">-- Please select --</option>
+                                <option value="OJCS">OJCS</option>
+                                <option value="TDSO">TDSO</option>
+								<option value="TDSO">Torah High</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <input type="text" id="child${i}OtherSchool" name="child${i}OtherSchool" class="other-school" placeholder="Please specify school">
+                        </div>
                         <div>
                             <label for="child${i}Grade">Grade:</label>
                             <select id="child${i}Grade" name="child${i}Grade" required>
@@ -243,15 +254,7 @@
                                 <option value="adult">Adult</option>
                             </select>
                         </div>
-                        <div>
-                            <label for="child${i}TimeType">Full time or part time:</label>
-                            <select id="child${i}TimeType" name="child${i}TimeType" onchange="toggleRidingTimes(${i})" required>
-                                <option value="">-- Please select --</option>
-                                <option value="fullTime">Full time</option>
-                                <option value="partTime">Part time</option>
-                            </select>
-                        </div>
-                        <div>
+						<div>
                             <label for="child${i}Carseat">Will the child be in a carseat?</label>
                             <select id="child${i}Carseat" name="child${i}Carseat" required>
                                 <option value="">-- Please select --</option>
@@ -260,16 +263,15 @@
                             </select>
                         </div>
                         <div>
-                            <label for="child${i}School">What school will the child attend?</label>
-                            <select id="child${i}School" name="child${i}School" onchange="toggleOtherSchool(${i})" required>
+                            <label for="child${i}TimeType">Full time or part time:</label>
+                            <select id="child${i}TimeType" name="child${i}TimeType" onchange="toggleRidingTimes(${i})" required>
                                 <option value="">-- Please select --</option>
-                                <option value="OJCS">OJCS</option>
-                                <option value="TDSO">TDSO</option>
-								<option value="TDSO">Torah High</option>
-                                <option value="other">Other</option>
+                                <option value="fullTime">Full time</option>
+                                <option value="partTime">Part time</option>
                             </select>
-                            <input type="text" id="child${i}OtherSchool" name="child${i}OtherSchool" class="other-school" placeholder="Please specify school">
                         </div>
+
+
                     </div>
                     <div id="child${i}RidingTimes" class="riding-times">
                         <label>Riding times (select all that apply):</label>
