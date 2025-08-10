@@ -25,8 +25,8 @@
         color: #4CAF50;
     }
     p.intro {
-        text-align: center;
-        font-size: 18px;
+        text-align: left;
+        font-size: 16px;
     }
     label {
         margin-top: 10px;
@@ -138,7 +138,17 @@
 <body>
 <div class="container">
 <h1>CMH Bus Registration 2025/2026</h1>
-<p class="intro">Welcome to the CMH Bus Registration for the 2025/2026 school year. Please fill out the form below to register your children for the bus service.</p>
+<p class="intro">
+    Welcome to the CMH Bus Registration for the 2025/2026 school year!<br><br>
+    <b>New Timings:</b> The morning bus will now leave from CMH at <b>7:50am</b> (instead of 8:00am). Please arrive between <b>7:40–7:45am</b>.
+    The bus will drop off first at <b>TDSO around 8:20am</b> and then at <b>OJCS at 8:35am</b>.<br>
+    In the afternoon, it will leave OJCS at <b>3:55pm</b>, pick up at TDSO at <b>4:05pm</b>, and return to CMH around <b>4:40pm</b>.<br><br>
+    <b>Costs:</b> Fees have increased about 5%. The calculation is shown below.<br><br>
+    <b>Payments:</b> All payments will be made via eTransfer to <b>cmhbus@gmail.com</b>.<br>
+    - If paid <b>in full before September 1</b>, you’ll receive a <b>2% discount</b>.<br>
+    - If paid monthly, please send <b>10 payments</b> on the <b>1st day of each month</b> from September to June.<br><br>
+    <b>Good news:</b> We expect to have enough seats for everyone — no more waitlist!
+</p>
 <hr>
 <form id="registrationForm" action="https://formspree.io/f/xwpelrve" method="POST">
     <div class="form-row">
@@ -181,7 +191,7 @@
     <hr>
 
     <label for="paymentOptions">Payment Options:</label>
-    <select id="paymentOptions" name="paymentOptions" required>
+    <select id="paymentOptions" name="paymentOptions" required onchange="updateCost()">
         <option value="">-- Please select --</option>
         <option value="fullPayment">I'll eTransfer the full amount to cmhbus@gmail.com (one time payment)</option>
         <option value="monthlyInstallments">I'll set up monthly eTransfer payments to cmhbus@gmail.com. Payments will be on the 1st day of the month.</option>
@@ -199,7 +209,6 @@
 
 <script>
 document.getElementById('numChildren').addEventListener('input', updateChildrenForms);
-document.getElementById('paymentOptions').addEventListener('change', updateCost);
 
 function updateChildrenForms() {
     const numChildren = document.getElementById('numChildren').value;
@@ -363,28 +372,4 @@ function toggleRidingTimes(childIndex) {
 }
 
 function toggleOtherSchool(childIndex) {
-    const schoolSelect = document.getElementById(`child${childIndex}School`);
-    const otherSchoolInput = document.getElementById(`child${childIndex}OtherSchool`);
-    otherSchoolInput.style.display = (schoolSelect.value === 'other') ? 'block' : 'none';
-}
-
-function updateCost() {
-    const numChildren = parseInt(document.getElementById('numChildren').value, 10);
-    let a = -100, b = 1300, c = 700, FTE = 0;
-
-    for (let i = 0; i < numChildren; i++) {
-        const timeType = document.getElementById(`child${i + 1}TimeType`).value;
-        if (timeType === 'fullTime') {
-            FTE++;
-        } else if (timeType === 'partTime') {
-            const ridingTimes = document.querySelectorAll(`#child${i + 1}RidingTimes input[type="checkbox"]:checked`);
-            let fraction = ridingTimes.length / 10;
-            FTE += fraction;
-        }
-    }
-    const totalCost = a * FTE * FTE + b * FTE + c;
-    document.getElementById('totalCost').innerText = totalCost.toFixed(0);
-}
-</script>
-</body>
-</html>
+    const schoolSelect = document.getElement
