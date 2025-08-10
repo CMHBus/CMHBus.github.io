@@ -327,6 +327,7 @@
 			let b=1300;
 			let c=700;
 		    let FTE = 0;
+			let totalCost=0;
 		
 		    for (let i = 0; i < numChildren; i++) {
 		        const timeType = document.getElementById(`child${i + 1}TimeType`).value;
@@ -339,7 +340,7 @@
 		        }
 		    }
 		
-		    totalCost += a*FTE*FTE+b*FTE+c;
+		    totalCost = a*FTE*FTE+b*FTE+c;
 
 		    // Update the hidden fields and display the results
 		    document.getElementById('totalCost').innerText = totalCost.toFixed(0);
