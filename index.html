@@ -211,10 +211,14 @@
 </div>
 
 <script>
+    
+document.getElementById('numChildren').addEventListener('input', updateChildrenForms);
+
+<script>
 document.getElementById('numChildren').addEventListener('input', updateChildrenForms);
 
 function updateChildrenForms() {
-    const numChildren = document.getElementById('numChildren').value;
+    const numChildren = parseInt(document.getElementById('numChildren').value);
     const childrenFormsContainer = document.getElementById('childrenForms');
     childrenFormsContainer.innerHTML = '';
 
@@ -229,20 +233,22 @@ function updateChildrenForms() {
             <div class="child-form-row">
                 <div>
                     <label for="child${i}School">What school will the child attend?</label>
-                    <select id="child${i}School" name="child${i}School" onchange="toggleOtherSchool(${i}); handleTorahHigh(${i});" required>
+                    <select id="child${i}School" name="child${i}School" required>
                         <option value="">-- Please select --</option>
                         <option value="OJCS">OJCS</option>
                         <option value="TDSO">TDSO</option>
                         <option value="TorahHigh">Torah High</option>
                         <option value="other">Other</option>
                     </select>
-                    <input type="text" id="child${i}OtherSchool" name="child${i}OtherSchool" class="other-school" placeholder="Please specify school">
+                    <input type="text" id="child${i}OtherSchool" name="child${i}OtherSchool" class="other-school" placeholder="Please specify school" style="display:none;">
                 </div>
-                <div>
+
+                <div id="child${i}GradeDiv" style="display:none;">
                     <label for="child${i}Grade">Grade:</label>
-                    <select id="child${i}Grade" name="child${i}Grade" onchange="toggleCarseat(${i})" required></select>
+                    <select id="child${i}Grade" name="child${i}Grade" required></select>
                 </div>
-                <div id="child${i}CarseatDiv">
+
+                <div id="child${i}CarseatDiv" style="display:none;">
                     <label for="child${i}Carseat">Will the child be in a carseat?</label>
                     <select id="child${i}Carseat" name="child${i}Carseat" required>
                         <option value="">-- Please select --</option>
@@ -250,16 +256,17 @@ function updateChildrenForms() {
                         <option value="no">No</option>
                     </select>
                 </div>
-                <div id="child${i}TimeTypeDiv">
+
+                <div id="child${i}TimeTypeDiv" style="display:none;">
                     <label for="child${i}TimeType">Full time or part time:</label>
-                    <select id="child${i}TimeType" name="child${i}TimeType" onchange="toggleRidingTimes(${i})" required>
+                    <select id="child${i}TimeType" name="child${i}TimeType" required>
                         <option value="">-- Please select --</option>
                         <option value="fullTime">Full time</option>
                         <option value="partTime">Part time</option>
                     </select>
                 </div>
             </div>
-            <div id="child${i}RidingTimes" class="riding-times">
+            <div id="child${i}RidingTimes" class="riding-times" style="display:none;">
                 <label>Riding times (select all that apply):</label>
                 <div class="riding-times-grid">
                     <label><input type="checkbox" name="child${i}RidingTimes[]" value="Monday AM" checked> Monday AM</label>
@@ -277,16 +284,136 @@ function updateChildrenForms() {
         `;
         childrenFormsContainer.appendChild(childForm);
 
-        document.getElementById(`child${i}School`).addEventListener('change', () => handleTorahHigh(i));
-        document.getElementById(`child${i}Grade`).addEventListener('change', () => toggleCarseat(i));
-        handleTorahHigh(i);
-
-        const checkboxes = document.querySelectorAll(`#child${i}RidingTimes input[type="checkbox"]`);
-        checkboxes.forEach(cb => cb.addEventListener('change', updateCost));
+        // Setup event listeners:
+        document.getElementById(`child${i}School`).addEventListener('change', () => handleSchoolChange(i));
+        // Grade select will be populated & then we add listener after school change
     }
+}
+
+function handleSchoolChange(childIndex) {
+    const schoolSelect = document.getElementById(`child${childIndex}School`);
+    const otherSchoolInput = document.getElementById(`child${childIndex}OtherSchool`);
+    const gradeDiv = document.getElementById(`child${childIndex}GradeDiv`);
+    const gradeSelect = document.getElementById(`child${childIndex}Grade`);
+    const carseatDiv = document.getElementById(`child${childIndex}CarseatDiv`);
+    const timeTypeDiv = document.getElementById(`child${childIndex}TimeTypeDiv`);
+    const timeTypeSelect = document.getElementById(`child${childIndex}TimeType`);
+    const ridingTimesDiv = document.getElementById(`child${childIndex}RidingTimes`);
+
+    // Show/hide "Other school" textbox
+    otherSchoolInput.style.display = schoolSelect.value === 'other' ? 'block' : 'none';
+
+    if (schoolSelect.value === "") {
+        gradeDiv.style.display = 'none';
+        carseatDiv.style.display = 'none';
+        timeTypeDiv.style.display = 'none';
+        ridingTimesDiv.style.display = 'none';
+        gradeSelect.innerHTML = "";
+        return;
+    }
+
+    // Populate grades depending on school
+    let gradeOptions = '<option value="">-- Please select --</option>';
+    if (schoolSelect.value === 'OJCS' || schoolSelect.value === 'TDSO') {
+        gradeOptions += `
+            <option value="preschool">Preschool</option>
+            <option value="JK">JK</option>
+            <option value="SK">SK</option>
+            <option value="Grade 1">Grade 1</option>
+            <option value="Grade 2">Grade 2</option>
+            <option value="Grade 3">Grade 3</option>
+            <option value="Grade 4">Grade 4</option>
+            <option value="Grade 5">Grade 5</option>
+            <option value="Grade 6">Grade 6</option>
+            <option value="Grade 7">Grade 7</option>
+            <option value="Grade 8">Grade 8</option>
+        `;
+    } else if (schoolSelect.value === 'TorahHigh') {
+        gradeOptions += `
+            <option value="Grade 9">Grade 9</option>
+            <option value="Grade 10">Grade 10</option>
+            <option value="Grade 11">Grade 11</option>
+            <option value="Grade 12">Grade 12</option>
+            <option value="adult">Adult</option>
+        `;
+    } else {
+        gradeOptions += `
+            <option value="preschool">Preschool</option>
+            <option value="JK">JK</option>
+            <option value="SK">SK</option>
+            <option value="Grade 1">Grade 1</option>
+            <option value="Grade 2">Grade 2</option>
+            <option value="Grade 3">Grade 3</option>
+            <option value="Grade 4">Grade 4</option>
+            <option value="Grade 5">Grade 5</option>
+            <option value="Grade 6">Grade 6</option>
+            <option value="Grade 7">Grade 7</option>
+            <option value="Grade 8">Grade 8</option>
+            <option value="Grade 9">Grade 9</option>
+            <option value="Grade 10">Grade 10</option>
+            <option value="Grade 11">Grade 11</option>
+            <option value="Grade 12">Grade 12</option>
+            <option value="adult">Adult</option>
+        `;
+    }
+    gradeSelect.innerHTML = gradeOptions;
+
+    gradeDiv.style.display = 'block';
+
+    // Reset subsequent fields
+    carseatDiv.style.display = 'none';
+    timeTypeDiv.style.display = 'none';
+    ridingTimesDiv.style.display = 'none';
+    gradeSelect.value = "";
+
+    // Add listener for grade change
+    gradeSelect.onchange = () => handleGradeChange(childIndex);
+
+    // Hide and reset timeTypeSelect to empty
+    if (timeTypeSelect) timeTypeSelect.value = "";
+}
+
+function handleGradeChange(childIndex) {
+    const gradeSelect = document.getElementById(`child${childIndex}Grade`);
+    const grade = gradeSelect.value;
+    const carseatDiv = document.getElementById(`child${childIndex}CarseatDiv`);
+    const timeTypeDiv = document.getElementById(`child${childIndex}TimeTypeDiv`);
+    const timeTypeSelect = document.getElementById(`child${childIndex}TimeType`);
+    const schoolSelect = document.getElementById(`child${childIndex}School`);
+    const ridingTimesDiv = document.getElementById(`child${childIndex}RidingTimes`);
+
+    // Show carseat only if grade is preschool, JK, SK, or Grade 1
+    if (["preschool", "JK", "SK", "Grade 1"].includes(grade)) {
+        carseatDiv.style.display = 'block';
+    } else {
+        carseatDiv.style.display = 'none';
+        const carseatSelect = document.getElementById(`child${childIndex}Carseat`);
+        if (carseatSelect) carseatSelect.value = "no";
+    }
+
+    // Show full/part time only if school is NOT Torah High
+    if (schoolSelect.value !== "TorahHigh") {
+        timeTypeDiv.style.display = 'block';
+        ridingTimesDiv.style.display = 'none'; // will show if partTime selected later
+        if (timeTypeSelect) timeTypeSelect.value = "";
+        timeTypeSelect.onchange = () => {
+            if (timeTypeSelect.value === "partTime") {
+                ridingTimesDiv.style.display = 'block';
+            } else {
+                ridingTimesDiv.style.display = 'none';
+            }
+            updateCost();
+        };
+    } else {
+        timeTypeDiv.style.display = 'none';
+        ridingTimesDiv.style.display = 'block';
+    }
+
     updateCost();
 }
 
+
+    
 function toggleCarseat(childIndex) {
     const grade = document.getElementById(`child${childIndex}Grade`).value;
     const carseatDiv = document.getElementById(`child${childIndex}CarseatDiv`);
