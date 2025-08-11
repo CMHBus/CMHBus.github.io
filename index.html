@@ -211,16 +211,17 @@
 </div>
 
 <script>
-    
-document.getElementById('numChildren').addEventListener('input', updateChildrenForms);
-
-<script>
 document.getElementById('numChildren').addEventListener('input', updateChildrenForms);
 
 function updateChildrenForms() {
     const numChildren = parseInt(document.getElementById('numChildren').value);
     const childrenFormsContainer = document.getElementById('childrenForms');
     childrenFormsContainer.innerHTML = '';
+
+    if (isNaN(numChildren) || numChildren <= 0) {
+        updateCost();
+        return;
+    }
 
     for (let i = 1; i <= numChildren; i++) {
         const childForm = document.createElement('div');
@@ -284,10 +285,10 @@ function updateChildrenForms() {
         `;
         childrenFormsContainer.appendChild(childForm);
 
-        // Setup event listeners:
+        // Setup event listeners
         document.getElementById(`child${i}School`).addEventListener('change', () => handleSchoolChange(i));
-        // Grade select will be populated & then we add listener after school change
     }
+    updateCost();
 }
 
 function handleSchoolChange(childIndex) {
@@ -309,6 +310,7 @@ function handleSchoolChange(childIndex) {
         timeTypeDiv.style.display = 'none';
         ridingTimesDiv.style.display = 'none';
         gradeSelect.innerHTML = "";
+        updateCost();
         return;
     }
 
@@ -357,7 +359,6 @@ function handleSchoolChange(childIndex) {
         `;
     }
     gradeSelect.innerHTML = gradeOptions;
-
     gradeDiv.style.display = 'block';
 
     // Reset subsequent fields
@@ -365,158 +366,116 @@ function handleSchoolChange(childIndex) {
     timeTypeDiv.style.display = 'none';
     ridingTimesDiv.style.display = 'none';
     gradeSelect.value = "";
+    // Don't reset timeTypeSelect.value to preserve selection
 
     // Add listener for grade change
-    gradeSelect.onchange = () => handleGradeChange(childIndex);
-
-    // Hide and reset timeTypeSelect to empty
-    if (timeTypeSelect) timeTypeSelect.value = "";
+    gradeSelect.addEventListener('change', () => handleGradeChange(childIndex));
+    updateCost();
 }
 
 function handleGradeChange(childIndex) {
     const gradeSelect = document.getElementById(`child${childIndex}Grade`);
     const grade = gradeSelect.value;
     const carseatDiv = document.getElementById(`child${childIndex}CarseatDiv`);
+    const carseatSelect = document.getElementById(`child${childIndex}Carseat`);
     const timeTypeDiv = document.getElementById(`child${childIndex}TimeTypeDiv`);
     const timeTypeSelect = document.getElementById(`child${childIndex}TimeType`);
     const schoolSelect = document.getElementById(`child${childIndex}School`);
     const ridingTimesDiv = document.getElementById(`child${childIndex}RidingTimes`);
+
+    if (grade === "") {
+        carseatDiv.style.display = 'none';
+        timeTypeDiv.style.display = 'none';
+        ridingTimesDiv.style.display = 'none';
+        updateCost();
+        return;
+    }
 
     // Show carseat only if grade is preschool, JK, SK, or Grade 1
     if (["preschool", "JK", "SK", "Grade 1"].includes(grade)) {
         carseatDiv.style.display = 'block';
     } else {
         carseatDiv.style.display = 'none';
-        const carseatSelect = document.getElementById(`child${childIndex}Carseat`);
-        if (carseatSelect) carseatSelect.value = "no";
+        carseatSelect.value = "no";
     }
 
-    // Show full/part time only if school is NOT Torah High
-    if (schoolSelect.value !== "TorahHigh") {
-        timeTypeDiv.style.display = 'block';
-        ridingTimesDiv.style.display = 'none'; // will show if partTime selected later
-        if (timeTypeSelect) timeTypeSelect.value = "";
-        timeTypeSelect.onchange = () => {
-            if (timeTypeSelect.value === "partTime") {
-                ridingTimesDiv.style.display = 'block';
-            } else {
-                ridingTimesDiv.style.display = 'none';
-            }
-            updateCost();
-        };
-    } else {
-        timeTypeDiv.style.display = 'none';
-        ridingTimesDiv.style.display = 'block';
-    }
-
-    updateCost();
-}
-
-
-    
-function toggleCarseat(childIndex) {
-    const grade = document.getElementById(`child${childIndex}Grade`).value;
-    const carseatDiv = document.getElementById(`child${childIndex}CarseatDiv`);
-    const carseatSelect = document.getElementById(`child${childIndex}Carseat`);
-    if (["preschool", "JK", "SK", "Grade 1"].includes(grade)) {
-        carseatDiv.style.display = 'block';
-    } else {
-        carseatDiv.style.display = 'none';
-        carseatSelect.value = 'no';
-    }
-}
-
-function handleTorahHigh(childIndex) {
-    const schoolSelect = document.getElementById(`child${childIndex}School`);
-    const gradeSelect = document.getElementById(`child${childIndex}Grade`);
-    const timeTypeSelect = document.getElementById(`child${childIndex}TimeType`);
-    const timeTypeDiv = document.getElementById(`child${childIndex}TimeTypeDiv`);
-    const ridingTimesDiv = document.getElementById(`child${childIndex}RidingTimes`);
-
-    let gradeOptions = '';
-    if (schoolSelect.value === 'OJCS' || schoolSelect.value === 'TDSO') {
-        gradeOptions = `
-            <option value="">-- Please select --</option>
-            <option value="preschool">Preschool</option>
-            <option value="JK">JK</option>
-            <option value="SK">SK</option>
-            <option value="Grade 1">Grade 1</option>
-            <option value="Grade 2">Grade 2</option>
-            <option value="Grade 3">Grade 3</option>
-            <option value="Grade 4">Grade 4</option>
-            <option value="Grade 5">Grade 5</option>
-            <option value="Grade 6">Grade 6</option>
-            <option value="Grade 7">Grade 7</option>
-            <option value="Grade 8">Grade 8</option>
-        `;
-    } else if (schoolSelect.value === 'TorahHigh') {
-        gradeOptions = `
-            <option value="">-- Please select --</option>
-            <option value="Grade 9">Grade 9</option>
-            <option value="Grade 10">Grade 10</option>
-            <option value="Grade 11">Grade 11</option>
-            <option value="Grade 12">Grade 12</option>
-            <option value="adult">Adult</option>
-        `;
-    } else {
-        gradeOptions = `
-            <option value="">-- Please select --</option>
-            <option value="preschool">Preschool</option>
-            <option value="JK">JK</option>
-            <option value="SK">SK</option>
-            <option value="Grade 1">Grade 1</option>
-            <option value="Grade 2">Grade 2</option>
-            <option value="Grade 3">Grade 3</option>
-            <option value="Grade 4">Grade 4</option>
-            <option value="Grade 5">Grade 5</option>
-            <option value="Grade 6">Grade 6</option>
-            <option value="Grade 7">Grade 7</option>
-            <option value="Grade 8">Grade 8</option>
-            <option value="Grade 9">Grade 9</option>
-            <option value="Grade 10">Grade 10</option>
-            <option value="Grade 11">Grade 11</option>
-            <option value="Grade 12">Grade 12</option>
-            <option value="adult">Adult</option>
-        `;
-    }
-    gradeSelect.innerHTML = gradeOptions;
-    toggleCarseat(childIndex);
-
-    if (schoolSelect.value === 'TorahHigh') {
-        // Hide the full/part time selector and automatically set to part time
+    // Special handling for Torah High
+    if (schoolSelect.value === "TorahHigh") {
+        // Torah High students are always part time
         timeTypeDiv.style.display = 'none';
         timeTypeSelect.value = 'partTime';
         ridingTimesDiv.style.display = 'block';
+        
+        // Torah High specific riding restrictions
         const checkboxes = ridingTimesDiv.querySelectorAll('input[type="checkbox"]');
         checkboxes.forEach(cb => {
             if (cb.value.includes('AM') || cb.value === 'Friday PM') {
-                cb.checked = true;
                 cb.disabled = false;
+                // Keep existing checked state if possible, otherwise default to checked
+                if (!cb.hasAttribute('data-initialized')) {
+                    cb.checked = true;
+                    cb.setAttribute('data-initialized', 'true');
+                }
             } else {
                 cb.checked = false;
                 cb.disabled = true;
             }
         });
+        
+        // Add event listeners for checkboxes (only once)
+        checkboxes.forEach(cb => {
+            if (!cb.hasAttribute('data-listener-added')) {
+                cb.addEventListener('change', updateCost);
+                cb.setAttribute('data-listener-added', 'true');
+            }
+        });
     } else {
-        // Show the full/part time selector for other schools
+        // Show full/part time selector for other schools
         timeTypeDiv.style.display = 'block';
-        const checkboxes = ridingTimesDiv.querySelectorAll('input[type="checkbox"]');
-        checkboxes.forEach(cb => cb.disabled = false);
+        
+        // Show riding times if part time is already selected
+        if (timeTypeSelect.value === "partTime") {
+            ridingTimesDiv.style.display = 'block';
+        } else {
+            ridingTimesDiv.style.display = 'none';
+        }
+        
+        // Add listener for time type change (only once)
+        if (!timeTypeSelect.hasAttribute('data-listener-added')) {
+            timeTypeSelect.addEventListener('change', () => {
+                if (timeTypeSelect.value === "partTime") {
+                    ridingTimesDiv.style.display = 'block';
+                    // Enable all checkboxes for non-Torah High schools
+                    const checkboxes = ridingTimesDiv.querySelectorAll('input[type="checkbox"]');
+                    checkboxes.forEach(cb => {
+                        cb.disabled = false;
+                        if (!cb.hasAttribute('data-listener-added')) {
+                            cb.addEventListener('change', updateCost);
+                            cb.setAttribute('data-listener-added', 'true');
+                        }
+                    });
+                } else {
+                    ridingTimesDiv.style.display = 'none';
+                }
+                updateCost();
+            });
+            timeTypeSelect.setAttribute('data-listener-added', 'true');
+        }
+        
+        // If part time is selected, ensure checkboxes are enabled and have listeners
+        if (timeTypeSelect.value === "partTime") {
+            const checkboxes = ridingTimesDiv.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(cb => {
+                cb.disabled = false;
+                if (!cb.hasAttribute('data-listener-added')) {
+                    cb.addEventListener('change', updateCost);
+                    cb.setAttribute('data-listener-added', 'true');
+                }
+            });
+        }
     }
-    updateCost();
-}
 
-function toggleRidingTimes(childIndex) {
-    const timeType = document.getElementById(`child${childIndex}TimeType`).value;
-    const ridingTimes = document.getElementById(`child${childIndex}RidingTimes`);
-    ridingTimes.style.display = (timeType === 'partTime') ? 'block' : 'none';
     updateCost();
-}
-
-function toggleOtherSchool(childIndex) {
-    const schoolSelect = document.getElementById(`child${childIndex}School`);
-    const otherSchoolInput = document.getElementById(`child${childIndex}OtherSchool`);
-    otherSchoolInput.style.display = (schoolSelect.value === 'other') ? 'block' : 'none';
 }
 
 function updateCost() {
@@ -525,18 +484,20 @@ function updateCost() {
     // Return early if no children specified
     if (isNaN(numChildren) || numChildren <= 0) {
         document.getElementById('totalCost').innerText = '0';
+        document.getElementById('FTEHidden').value = '0';
+        document.getElementById('totalCostHidden').value = '0';
         return;
     }
 
     let a = -100, b = 1300, c = 700, FTE = 0;
 
-    // Fixed loop: iterate from 1 to numChildren (inclusive)
+    // Calculate FTE for each child
     for (let i = 1; i <= numChildren; i++) {
         const timeTypeElement = document.getElementById(`child${i}TimeType`);
         
-        // Check if element exists before accessing its value
-        if (!timeTypeElement) {
-            continue; // Skip this iteration if element doesn't exist yet
+        // Check if element exists and has a value
+        if (!timeTypeElement || !timeTypeElement.value) {
+            continue; // Skip this iteration if element doesn't exist or has no value
         }
         
         const timeType = timeTypeElement.value;
@@ -544,7 +505,7 @@ function updateCost() {
         if (timeType === 'fullTime') {
             FTE++;
         } else if (timeType === 'partTime') {
-            const ridingTimes = document.querySelectorAll(`#child${i}RidingTimes input[type="checkbox"]:checked`);
+            const ridingTimes = document.querySelectorAll(`#child${i}RidingTimes input[type="checkbox"]:checked:not([disabled])`);
             let fraction = ridingTimes.length / 10;
             FTE += fraction;
         }
@@ -558,9 +519,11 @@ function updateCost() {
         totalCost *= 0.98;
     }
 
+    // Update all cost displays
+    const finalCost = Math.max(0, totalCost).toFixed(0);
     document.getElementById('FTEHidden').value = FTE.toFixed(1);
-    document.getElementById('totalCostHidden').value = Math.max(0, totalCost).toFixed(0);
-    document.getElementById('totalCost').innerText = Math.max(0, totalCost).toFixed(0);
+    document.getElementById('totalCostHidden').value = finalCost;
+    document.getElementById('totalCost').innerText = finalCost;
 }
 </script>
 </body>
