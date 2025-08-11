@@ -203,8 +203,9 @@
         <label for="comments">Additional Comments:</label>
         <textarea id="comments" name="comments" rows="4" placeholder="Enter any additional comments or special instructions here." style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;"></textarea>
     </div>
-    
-    <input type="hidden" id="totalCostInput" name="totalCost" value="700">
+
+    <input type="hidden" id="FTEHidden" name="FTE" value="0">
+    <input type="hidden" id="totalCostHidden" name="totalCost" value="700">
     <button type="submit">Register</button>
 </form>
 </div>
@@ -429,8 +430,9 @@ function updateCost() {
     if (paymentOptions && paymentOptions.value === 'fullPayment') {
         totalCost *= 0.98;
     }
-    
-    document.getElementById('totalCostInput').value = Math.max(0, totalCost).toFixed(0);
+
+    document.getElementById('FTEHidden').value = FTE.toFixed(0);
+    document.getElementById('totalCostHidden').value = Math.max(0, totalCost).toFixed(0);
     document.getElementById('totalCost').innerText = Math.max(0, totalCost).toFixed(0);
 }
 </script>
