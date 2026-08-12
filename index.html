@@ -140,15 +140,23 @@
 <h1>CMH Bus Registration 2026/2027</h1>
 <p class="intro">
     Welcome to the CMH Bus Registration for the 2026/2027 school year!<br><br>
-    The morning bus will now have 2 stops. 
-        1) Fairbanks and Crestview ay 7:33am. Latecommers will be left behind.
-        2) CMH parking lot arriving at 7:40am. Passengers should be on the bus by 7:45am. Bus will depart at 7:50am.
-    The bus will drop off first at <b>TDSO around 8:20am</b> and then at <b>OJCS at 8:35am</b>.<br>
-    In the afternoon, it will leave OJCS at <b>3:50pm</b>, pick up at TDSO at <b>4:05pm</b>, and return to CMH around <b>4:45pm</b> and Crestview around 5:00pm <br><br>
-    <b>Costs:</b> Fees have increased since last year. The calculation is shown below.<br><br>
-    <b>Payments:</b> All payments will be made via eTransfer to <b>cmhbusexec@gmail.com</b>.<br>
-    - If paid <b>in full before September 1</b>, you'll receive a <b>2% discount</b>.<br>
-    - If paid monthly, please send <b>10 payments</b> on the <b>1st day of each month</b> from September to June.<br><br>
+
+    <b>Morning pickup:</b> The morning bus will now make 2 stops:
+    <ol>
+        <li><b>Fairbanks and Crestview</b> at <b>7:33am</b>. Latecomers will be left behind.</li>
+        <li><b>CMH parking lot</b>, arriving at <b>7:40am</b>. Passengers should be on the bus by <b>7:45am</b>; the bus will depart at <b>7:50am</b>.</li>
+    </ol>
+    It will then drop off at <b>TDSO around 8:20am</b> and at <b>OJCS around 8:35am</b>.<br><br>
+
+    <b>Afternoon drop-off:</b> The bus will leave OJCS at <b>3:50pm</b>, pick up at TDSO at <b>4:05pm</b>, and return to CMH around <b>4:45pm</b> and Fairbanks and Crestview around <b>5:00pm</b>.<br><br>
+
+    <b>Costs:</b> Fees have increased since last year. See the cost calculation below.<br><br>
+
+    <b>Payments:</b> All payments are made via eTransfer to <b>cmhbusexec@gmail.com</b>.
+    <ul>
+        <li>Pay <b>in full before September 1</b> for a <b>2% discount</b>.</li>
+        <li>Or pay in <b>10 monthly installments</b>, due on the <b>1st of each month</b> from September to June.</li>
+    </ul>
 </p>
 <hr>
 <form id="registrationForm" action="https://script.google.com/macros/s/AKfycbxhAW94LXwNKOkWAJoZh5cdnF1FQpZpQQpzBcM7Umy5tnXdz0nloQbNCrjQFojNAu_76w/exec" method="POST">
@@ -167,6 +175,14 @@
     <div class="email-phone-row">
         <input type="tel" id="parentPhone1" name="parentPhone1" placeholder="Phone number 1" required>
         <input type="tel" id="parentPhone2" name="parentPhone2" placeholder="Phone number 2">
+    </div>
+
+    <div class="form-row">
+        <label for="pickupLocation">Pickup Location:</label>
+        <select id="pickupLocation" name="pickupLocation" required>
+            <option value="CMH" selected>CMH</option>
+            <option value="Fairbanks at Crestview">Fairbanks at Crestview</option>
+        </select>
     </div>
 
     <div class="form-row">
@@ -217,14 +233,24 @@ document.getElementById('numChildren').addEventListener('input', updateChildrenF
 function updateChildrenForms() {
     const numChildren = parseInt(document.getElementById('numChildren').value);
     const childrenFormsContainer = document.getElementById('childrenForms');
-    childrenFormsContainer.innerHTML = '';
+    const existingForms = childrenFormsContainer.querySelectorAll('.child-form');
+    const existingCount = existingForms.length;
 
     if (isNaN(numChildren) || numChildren <= 0) {
+        childrenFormsContainer.innerHTML = '';
         updateCost();
         return;
     }
 
-    for (let i = 1; i <= numChildren; i++) {
+    // Remove extra forms from the end if the count went down
+    if (numChildren < existingCount) {
+        for (let i = existingCount; i > numChildren; i--) {
+            existingForms[i - 1].remove();
+        }
+    }
+
+    // Add new forms for any additional children, leaving existing ones untouched
+    for (let i = existingCount + 1; i <= numChildren; i++) {
         const childForm = document.createElement('div');
         childForm.classList.add('child-form');
         childForm.innerHTML = `
@@ -239,7 +265,7 @@ function updateChildrenForms() {
                         <option value="">-- Please select --</option>
                         <option value="OJCS">OJCS</option>
                         <option value="TDSO">TDSO</option>
-                        <option value="TorahHigh">Torah High</option>
+                        <option value="YHSO">YHSO</option>
                         <option value="other">Other</option>
                     </select>
                     <input type="text" id="child${i}OtherSchool" name="child${i}OtherSchool" class="other-school" placeholder="Please specify school" style="display:none;">
@@ -331,7 +357,7 @@ function handleSchoolChange(childIndex) {
             <option value="Grade 7">Grade 7</option>
             <option value="Grade 8">Grade 8</option>
         `;
-    } else if (schoolSelect.value === 'TorahHigh') {
+    } else if (schoolSelect.value === 'YHSO') {
         gradeOptions += `
             <option value="Grade 9">Grade 9</option>
             <option value="Grade 10">Grade 10</option>
@@ -400,14 +426,14 @@ function handleGradeChange(childIndex) {
         carseatSelect.value = "no";
     }
 
-    // Special handling for Torah High
-    if (schoolSelect.value === "TorahHigh") {
-        // Torah High students are always part time
+    // Special handling for YHSO
+    if (schoolSelect.value === "YHSO") {
+        // YHSO students are always part time
         timeTypeDiv.style.display = 'none';
         timeTypeSelect.value = 'partTime';
         ridingTimesDiv.style.display = 'block';
         
-        // Torah High specific riding restrictions
+        // YHSO specific riding restrictions
         const checkboxes = ridingTimesDiv.querySelectorAll('input[type="checkbox"]');
         checkboxes.forEach(cb => {
             if (cb.value.includes('AM') || cb.value === 'Friday PM') {
@@ -446,7 +472,7 @@ function handleGradeChange(childIndex) {
             timeTypeSelect.addEventListener('change', () => {
                 if (timeTypeSelect.value === "partTime") {
                     ridingTimesDiv.style.display = 'block';
-                    // Enable all checkboxes for non-Torah High schools
+                    // Enable all checkboxes for non-YHSO schools
                     const checkboxes = ridingTimesDiv.querySelectorAll('input[type="checkbox"]');
                     checkboxes.forEach(cb => {
                         cb.disabled = false;
