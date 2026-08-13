@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CMH Bus Registration 2026/2027</title>
+<title>CMH Bus Registration 2025/2026</title>
 <style>
     body {
         font-family: 'Arial', sans-serif;
@@ -130,6 +130,20 @@
         font-weight: bold;
         color: #4CAF50;
     }
+    .savings-badge {
+        display: none;
+        background-color: #e8f5e9;
+        color: #2e7d32;
+        font-weight: bold;
+        font-size: 13px;
+        padding: 3px 10px;
+        border-radius: 12px;
+        margin-left: 6px;
+        white-space: nowrap;
+    }
+    .savings-badge.visible {
+        display: inline-block;
+    }
     .other-school {
         display: none;
     }
@@ -194,7 +208,7 @@
     <div id="childrenForms"></div>
 
     <div id="costEstimation">
-        <p>Total Cost: $<span id="totalCost">0</span></p>
+        <p>Total Cost: $<span id="totalCost">0</span> <span id="savingsBadge" class="savings-badge">You're saving 2%!</span></p>
     </div>
 
     <hr>
@@ -211,7 +225,7 @@
     <label for="paymentOptions">Payment Options:</label>
     <select id="paymentOptions" name="paymentOptions" required onchange="updateCost()">
         <option value="">-- Please select --</option>
-        <option value="fullPayment">I'll eTransfer the full amount to cmhbusexec@gmail.com  (one time payment)</option>
+        <option value="fullPayment">I'll eTransfer the full amount to cmhbusexec@gmail.com  (one time payment — save 2%!)</option>
         <option value="monthlyInstallments">I'll set up monthly eTransfer payments to cmhbusexec@gmail.com. Payments will be on the 1st day of the month.</option>
         <option value="other">I'll pay by another means</option>
     </select><br>
@@ -426,80 +440,48 @@ function handleGradeChange(childIndex) {
         carseatSelect.value = "no";
     }
 
-    // Special handling for YHSO
-    if (schoolSelect.value === "YHSO") {
-        // YHSO students are always part time
-        timeTypeDiv.style.display = 'none';
-        timeTypeSelect.value = 'partTime';
+    // Show full/part time selector (same for all schools)
+    timeTypeDiv.style.display = 'block';
+
+    // Show riding times if part time is already selected
+    if (timeTypeSelect.value === "partTime") {
         ridingTimesDiv.style.display = 'block';
-        
-        // YHSO specific riding restrictions
+    } else {
+        ridingTimesDiv.style.display = 'none';
+    }
+
+    // Add listener for time type change (only once)
+    if (!timeTypeSelect.hasAttribute('data-listener-added')) {
+        timeTypeSelect.addEventListener('change', () => {
+            if (timeTypeSelect.value === "partTime") {
+                ridingTimesDiv.style.display = 'block';
+                // Enable all checkboxes
+                const checkboxes = ridingTimesDiv.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach(cb => {
+                    cb.disabled = false;
+                    if (!cb.hasAttribute('data-listener-added')) {
+                        cb.addEventListener('change', updateCost);
+                        cb.setAttribute('data-listener-added', 'true');
+                    }
+                });
+            } else {
+                ridingTimesDiv.style.display = 'none';
+            }
+            updateCost();
+        });
+        timeTypeSelect.setAttribute('data-listener-added', 'true');
+    }
+
+    // If part time is selected, ensure checkboxes are enabled and have listeners
+    if (timeTypeSelect.value === "partTime") {
         const checkboxes = ridingTimesDiv.querySelectorAll('input[type="checkbox"]');
         checkboxes.forEach(cb => {
-            if (cb.value.includes('AM') || cb.value === 'Friday PM') {
-                cb.disabled = false;
-                // Keep existing checked state if possible, otherwise default to checked
-                if (!cb.hasAttribute('data-initialized')) {
-                    cb.checked = true;
-                    cb.setAttribute('data-initialized', 'true');
-                }
-            } else {
-                cb.checked = false;
-                cb.disabled = true;
-            }
-        });
-        
-        // Add event listeners for checkboxes (only once)
-        checkboxes.forEach(cb => {
+            cb.disabled = false;
             if (!cb.hasAttribute('data-listener-added')) {
                 cb.addEventListener('change', updateCost);
                 cb.setAttribute('data-listener-added', 'true');
             }
         });
-    } else {
-        // Show full/part time selector for other schools
-        timeTypeDiv.style.display = 'block';
-        
-        // Show riding times if part time is already selected
-        if (timeTypeSelect.value === "partTime") {
-            ridingTimesDiv.style.display = 'block';
-        } else {
-            ridingTimesDiv.style.display = 'none';
-        }
-        
-        // Add listener for time type change (only once)
-        if (!timeTypeSelect.hasAttribute('data-listener-added')) {
-            timeTypeSelect.addEventListener('change', () => {
-                if (timeTypeSelect.value === "partTime") {
-                    ridingTimesDiv.style.display = 'block';
-                    // Enable all checkboxes for non-YHSO schools
-                    const checkboxes = ridingTimesDiv.querySelectorAll('input[type="checkbox"]');
-                    checkboxes.forEach(cb => {
-                        cb.disabled = false;
-                        if (!cb.hasAttribute('data-listener-added')) {
-                            cb.addEventListener('change', updateCost);
-                            cb.setAttribute('data-listener-added', 'true');
-                        }
-                    });
-                } else {
-                    ridingTimesDiv.style.display = 'none';
-                }
-                updateCost();
-            });
-            timeTypeSelect.setAttribute('data-listener-added', 'true');
-        }
-        
-        // If part time is selected, ensure checkboxes are enabled and have listeners
-        if (timeTypeSelect.value === "partTime") {
-            const checkboxes = ridingTimesDiv.querySelectorAll('input[type="checkbox"]');
-            checkboxes.forEach(cb => {
-                cb.disabled = false;
-                if (!cb.hasAttribute('data-listener-added')) {
-                    cb.addEventListener('change', updateCost);
-                    cb.setAttribute('data-listener-added', 'true');
-                }
-            });
-        }
     }
 
     updateCost();
@@ -513,6 +495,7 @@ function updateCost() {
         document.getElementById('totalCost').innerText = '0';
         document.getElementById('FTEHidden').value = '0';
         document.getElementById('totalCostHidden').value = '0';
+        document.getElementById('savingsBadge').classList.remove('visible');
         return;
     }
 
@@ -542,9 +525,11 @@ function updateCost() {
     
     // Apply discount if full payment is selected
     const paymentOptions = document.getElementById('paymentOptions');
-    if (paymentOptions && paymentOptions.value === 'fullPayment') {
+    const isFullPayment = paymentOptions && paymentOptions.value === 'fullPayment';
+    if (isFullPayment) {
         totalCost *= 0.98;
     }
+    document.getElementById('savingsBadge').classList.toggle('visible', isFullPayment);
 
     // Update all cost displays
     const finalCost = Math.max(0, totalCost).toFixed(0);
