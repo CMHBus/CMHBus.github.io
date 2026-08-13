@@ -236,7 +236,7 @@
     We've filled in your saved info from last time. <a id="clearSavedInfoLink">Not you? Clear saved info</a>
 </div>
 
-<form id="hopOnForm" action="https://script.google.com/macros/s/AKfycbxgNH7zjnslb5ThbynZ3OiBliJNJBtB7LC-x5Cs90KvyVkk1t4FqQSFSphCy-7CaQTc/exec" method="POST">
+<form id="hopOnForm" novalidate action="https://script.google.com/macros/s/AKfycbxgNH7zjnslb5ThbynZ3OiBliJNJBtB7LC-x5Cs90KvyVkk1t4FqQSFSphCy-7CaQTc/exec" method="POST">
     <div class="form-row">
         <label for="parentName">Your name:</label>
         <input type="text" id="parentName" name="parentName" required>
@@ -573,10 +573,58 @@ document.getElementById('clearSavedInfoLink').addEventListener('click', () => {
     document.getElementById('savedInfoNote').style.display = 'none';
 });
 
-document.getElementById('hopOnForm').addEventListener('submit', (e) => {
+function validateForm() {
+    const parentName = document.getElementById('parentName');
+    const parentEmail = document.getElementById('parentEmail');
+    const numChildrenInput = document.getElementById('numChildren');
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!parentName.value.trim()) {
+        alert('Please enter your name.');
+        parentName.focus();
+        return false;
+    }
+    if (!parentEmail.value.trim() || !emailPattern.test(parentEmail.value.trim())) {
+        alert('Please enter a valid email address.');
+        parentEmail.focus();
+        return false;
+    }
+    const numChildren = parseInt(numChildrenInput.value, 10);
+    if (!numChildren || numChildren < 1 || numChildren > 6) {
+        alert('Please enter the number of children (1-6).');
+        numChildrenInput.focus();
+        return false;
+    }
+    for (let i = 1; i <= numChildren; i++) {
+        const nameEl = document.getElementById(`child${i}Name`);
+        const schoolEl = document.getElementById(`child${i}School`);
+        const gradeEl = document.getElementById(`child${i}Grade`);
+        if (!nameEl.value.trim()) {
+            alert(`Please enter Child ${i}'s name.`);
+            nameEl.focus();
+            return false;
+        }
+        if (!schoolEl.value) {
+            alert(`Please select Child ${i}'s school.`);
+            schoolEl.focus();
+            return false;
+        }
+        if (!gradeEl.value) {
+            alert(`Please select Child ${i}'s grade.`);
+            gradeEl.focus();
+            return false;
+        }
+    }
     if (selectedDates.length === 0) {
-        e.preventDefault();
         alert('Please add at least one ride date before submitting.');
+        return false;
+    }
+    return true;
+}
+
+document.getElementById('hopOnForm').addEventListener('submit', (e) => {
+    if (!validateForm()) {
+        e.preventDefault();
         return;
     }
     saveInfoToStorage();
