@@ -1,1 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CMH Bus - Hop-On Registration</title>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f9;
+        color: #333;
+        margin: 20px;
+        line-height: 1.6;
+    }
+    .container {
+        max-width: 800px;
+        margin: auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+        text-align: center;
+        color: #4CAF50;
+    }
+    p.intro {
+        text-align: left;
+        font-size: 16px;
+    }
+    label {
+        margin-top: 10px;
+        display: block;
+    }
+    .form-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    .form-row label {
+        flex: 1;
+    }
+    .form-row input[type="text"],
+    .form-row input[type="number"],
+    .form-row input[type="email"],
+    .form-row input[type="date"],
+    .form-row select {
+        flex: 2;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    input[type="date"],
+    select {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    .child-form {
+        margin-top: 20px;
+        padding: 10px;
+        border-top: 2px solid #ccc;
+    }
+    .child-form-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .child-form-header h3 {
+        margin: 0;
+        flex: 0 0 140px;
+    }
+    .child-form-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+    }
+    .child-form-row > div {
+        flex: 1;
+        min-width: 180px;
+    }
+    .date-picker-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: flex-end;
+        margin-top: 10px;
+    }
+    .date-picker-row > div {
+        flex: 1;
+        min-width: 160px;
+    }
+    .date-picker-row label {
+        margin-top: 0;
+    }
+    .checkbox-group {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        padding: 10px 0;
+    }
+    .checkbox-label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: normal;
+        margin-top: 0;
+        cursor: pointer;
+    }
+    .checkbox-label input[type="checkbox"] {
+        width: auto;
+        margin: 0;
+    }
+    #addDateBtn {
+        flex: 0 0 auto;
+        width: auto;
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 15px;
+        cursor: pointer;
+        margin-top: 5px;
+    }
+    #addDateBtn:hover {
+        background-color: #45a049;
+    }
+    #dateAddError {
+        color: #c0392b;
+        font-size: 14px;
+        margin-top: 6px;
+        display: none;
+    }
+    #selectedDatesList {
+        list-style: none;
+        padding: 0;
+        margin: 15px 0 0;
+    }
+    #selectedDatesList li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #f0f8f0;
+        border: 1px solid #cfe8cf;
+        border-radius: 6px;
+        padding: 8px 12px;
+        margin-bottom: 8px;
+        font-size: 15px;
+    }
+    #selectedDatesList .entry-cost {
+        color: #4CAF50;
+        font-weight: bold;
+        margin-left: 10px;
+    }
+    #selectedDatesList button {
+        background: none;
+        border: none;
+        color: #c0392b;
+        font-size: 18px;
+        line-height: 1;
+        cursor: pointer;
+        padding: 0 4px;
+        width: auto;
+        margin: 0 0 0 12px;
+    }
+    #noDatesMessage {
+        color: #777;
+        font-style: italic;
+        margin-top: 12px;
+    }
+    #costEstimation {
+        margin-top: 20px;
+        text-align: right;
+        font-size: 18px;
+    }
+    #totalCost {
+        font-weight: bold;
+        color: #4CAF50;
+    }
+    button[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+    button[type="submit"]:hover {
+        background-color: #45a049;
+    }
+    button[type="submit"]:disabled {
+        background-color: #a5d6a5;
+        cursor: not-allowed;
+    }
+    .saved-info-note {
+        font-size: 14px;
+        color: #555;
+        background-color: #f0f8f0;
+        border: 1px solid #cfe8cf;
+        border-radius: 6px;
+        padding: 10px 14px;
+        margin-bottom: 15px;
+        display: none;
+    }
+    .saved-info-note a {
+        color: #4CAF50;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>CMH Bus - Hop-On Registration</h1>
+<p class="intro">
+    Use this form to book single bus rides on specific dates &mdash; great for the occasional morning drop-off,
+    an afternoon pickup, or a whole week of rides. Rides cost <b>$15 per ride, per child</b> (a "Both" AM+PM day counts as 2 rides).<br><br>
+    Pick a date and whether you need AM, PM, or both, then click <b>Add Date</b>. You can add as many dates as you like before submitting &mdash;
+    they'll all be included in one registration.<br><br>
+    <b>Payment:</b> Once submitted, you'll receive a confirmation email with the total. Please e-transfer that amount to <b>cmhbusexec@gmail.com</b>.
+</p>
+<hr>
 
+<div id="savedInfoNote" class="saved-info-note">
+    We've filled in your saved info from last time. <a id="clearSavedInfoLink">Not you? Clear saved info</a>
+</div>
+
+<form id="hopOnForm" action="https://script.google.com/macros/s/AKfycbxgNH7zjnslb5ThbynZ3OiBliJNJBtB7LC-x5Cs90KvyVkk1t4FqQSFSphCy-7CaQTc/exec" method="POST">
+    <div class="form-row">
+        <label for="parentName">Your name:</label>
+        <input type="text" id="parentName" name="parentName" required>
+    </div>
+    <div class="form-row">
+        <label for="parentEmail">Your email:</label>
+        <input type="email" id="parentEmail" name="parentEmail" required>
+    </div>
+
+    <div class="form-row">
+        <label for="numChildren">Number of children (up to 6):</label>
+        <input type="number" id="numChildren" name="numChildren" min="1" max="6" required style="width: 80px; flex: 0 0 80px;">
+    </div>
+
+    <div id="childrenForms"></div>
+
+    <hr>
+
+    <h3 style="color:#4CAF50;">Ride Dates</h3>
+    <div class="date-picker-row">
+        <div>
+            <label for="rideDatePicker">Date:</label>
+            <input type="date" id="rideDatePicker">
+        </div>
+        <div>
+            <label>Ride time:</label>
+            <div class="checkbox-group">
+                <label class="checkbox-label"><input type="checkbox" id="rideTimeAM"> AM</label>
+                <label class="checkbox-label"><input type="checkbox" id="rideTimePM"> PM</label>
+            </div>
+        </div>
+        <button type="button" id="addDateBtn">+ Add Date</button>
+    </div>
+    <div id="dateAddError"></div>
+
+    <ul id="selectedDatesList"></ul>
+    <p id="noDatesMessage">No dates added yet.</p>
+
+    <div id="costEstimation">
+        <p>Total Cost: $<span id="totalCost">0</span></p>
+    </div>
+
+    <input type="hidden" id="selectedDatesJson" name="selectedDatesJson" value="[]">
+
+    <button type="submit" id="submitBtn">Register</button>
+</form>
+</div>
+
+<script>
+const STORAGE_KEY = 'hopOnSavedInfo';
+let selectedDates = []; // { date: 'yyyy-mm-dd', time: 'am'|'pm'|'both' }
+
+// ---------- School / Grade helpers (mirrors the main CMH registration form) ----------
+function gradeOptionsForSchool(school) {
+    let options = '<option value="">-- Please select --</option>';
+    if (school === 'OJCS' || school === 'TDSO') {
+        options += `
+            <option value="preschool">Preschool</option>
+            <option value="JK">JK</option>
+            <option value="SK">SK</option>
+            <option value="Grade 1">Grade 1</option>
+            <option value="Grade 2">Grade 2</option>
+            <option value="Grade 3">Grade 3</option>
+            <option value="Grade 4">Grade 4</option>
+            <option value="Grade 5">Grade 5</option>
+            <option value="Grade 6">Grade 6</option>
+            <option value="Grade 7">Grade 7</option>
+            <option value="Grade 8">Grade 8</option>
+        `;
+    } else if (school === 'YHSO') {
+        options += `
+            <option value="Grade 9">Grade 9</option>
+            <option value="Grade 10">Grade 10</option>
+            <option value="Grade 11">Grade 11</option>
+            <option value="Grade 12">Grade 12</option>
+            <option value="adult">Adult</option>
+        `;
+    } else {
+        options += `
+            <option value="preschool">Preschool</option>
+            <option value="JK">JK</option>
+            <option value="SK">SK</option>
+            <option value="Grade 1">Grade 1</option>
+            <option value="Grade 2">Grade 2</option>
+            <option value="Grade 3">Grade 3</option>
+            <option value="Grade 4">Grade 4</option>
+            <option value="Grade 5">Grade 5</option>
+            <option value="Grade 6">Grade 6</option>
+            <option value="Grade 7">Grade 7</option>
+            <option value="Grade 8">Grade 8</option>
+            <option value="Grade 9">Grade 9</option>
+            <option value="Grade 10">Grade 10</option>
+            <option value="Grade 11">Grade 11</option>
+            <option value="Grade 12">Grade 12</option>
+            <option value="adult">Adult</option>
+        `;
+    }
+    return options;
+}
+
+// ---------- Children forms (add/remove at the end, preserving existing entries) ----------
+function updateChildrenForms() {
+    const numChildren = Math.max(0, Math.min(6, parseInt(document.getElementById('numChildren').value, 10) || 0));
+    const container = document.getElementById('childrenForms');
+    const existingForms = container.querySelectorAll('.child-form');
+    const existingCount = existingForms.length;
+
+    if (numChildren < existingCount) {
+        for (let i = existingCount; i > numChildren; i--) {
+            existingForms[i - 1].remove();
+        }
+    }
+
+    for (let i = existingCount + 1; i <= numChildren; i++) {
+        const childForm = document.createElement('div');
+        childForm.classList.add('child-form');
+        childForm.innerHTML = `
+            <div class="child-form-header">
+                <h3>Child ${i}</h3>
+                <input type="text" id="child${i}Name" name="child${i}Name" placeholder="Child's name" required>
+            </div>
+            <div class="child-form-row">
+                <div>
+                    <label for="child${i}School">School:</label>
+                    <select id="child${i}School" name="child${i}School" required>
+                        <option value="">-- Please select --</option>
+                        <option value="OJCS">OJCS</option>
+                        <option value="TDSO">TDSO</option>
+                        <option value="YHSO">YHSO</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="child${i}Grade">Grade:</label>
+                    <select id="child${i}Grade" name="child${i}Grade" required>
+                        <option value="">-- Please select --</option>
+                    </select>
+                </div>
+            </div>
+        `;
+        container.appendChild(childForm);
+
+        const schoolSelect = document.getElementById(`child${i}School`);
+        const gradeSelect = document.getElementById(`child${i}Grade`);
+
+        schoolSelect.addEventListener('change', () => {
+            gradeSelect.innerHTML = gradeOptionsForSchool(schoolSelect.value);
+        });
+    }
+}
+
+document.getElementById('numChildren').addEventListener('input', updateChildrenForms);
+
+// ---------- Ride date picker ----------
+function formatLocalDate(d) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+}
+
+function formatDisplayDate(yyyyMmDd) {
+    const [y, m, d] = yyyyMmDd.split('-').map(Number);
+    const dateObj = new Date(y, m - 1, d);
+    return dateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+const TIME_LABELS = { am: 'AM only', pm: 'PM only', both: 'AM and PM' };
+
+(function setMinDate() {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    document.getElementById('rideDatePicker').min = formatLocalDate(tomorrow);
+})();
+
+function ridesForTime(time) {
+    return time === 'both' ? 2 : 1;
+}
+
+function renderSelectedDates() {
+    const list = document.getElementById('selectedDatesList');
+    const noDatesMsg = document.getElementById('noDatesMessage');
+    list.innerHTML = '';
+
+    if (selectedDates.length === 0) {
+        noDatesMsg.style.display = 'block';
+    } else {
+        noDatesMsg.style.display = 'none';
+        const numChildren = Math.max(0, parseInt(document.getElementById('numChildren').value, 10) || 0);
+        selectedDates.forEach((entry, index) => {
+            const cost = ridesForTime(entry.time) * numChildren * 15;
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <span>${formatDisplayDate(entry.date)} &mdash; ${TIME_LABELS[entry.time]}
+                    <span class="entry-cost">$${cost}</span>
+                </span>
+                <button type="button" aria-label="Remove date" data-index="${index}">&times;</button>
+            `;
+            list.appendChild(li);
+        });
+        list.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                selectedDates.splice(parseInt(btn.dataset.index, 10), 1);
+                renderSelectedDates();
+                updateCost();
+            });
+        });
+    }
+
+    document.getElementById('selectedDatesJson').value = JSON.stringify(selectedDates);
+    document.getElementById('submitBtn').disabled = selectedDates.length === 0;
+}
+
+document.getElementById('addDateBtn').addEventListener('click', () => {
+    const dateInput = document.getElementById('rideDatePicker');
+    const amCheckbox = document.getElementById('rideTimeAM');
+    const pmCheckbox = document.getElementById('rideTimePM');
+    const errorDiv = document.getElementById('dateAddError');
+    errorDiv.style.display = 'none';
+
+    if (!dateInput.value) {
+        errorDiv.textContent = 'Please choose a date.';
+        errorDiv.style.display = 'block';
+        return;
+    }
+    if (!amCheckbox.checked && !pmCheckbox.checked) {
+        errorDiv.textContent = 'Please select AM, PM, or both.';
+        errorDiv.style.display = 'block';
+        return;
+    }
+
+    const time = amCheckbox.checked && pmCheckbox.checked ? 'both' : (amCheckbox.checked ? 'am' : 'pm');
+
+    const duplicate = selectedDates.some(e => e.date === dateInput.value && e.time === time);
+    if (duplicate) {
+        errorDiv.textContent = 'That date and time is already on your list.';
+        errorDiv.style.display = 'block';
+        return;
+    }
+
+    selectedDates.push({ date: dateInput.value, time: time });
+    selectedDates.sort((a, b) => a.date.localeCompare(b.date));
+    renderSelectedDates();
+    updateCost();
+
+    dateInput.value = '';
+    amCheckbox.checked = false;
+    pmCheckbox.checked = false;
+});
+
+function updateCost() {
+    const numChildren = Math.max(0, parseInt(document.getElementById('numChildren').value, 10) || 0);
+    let total = 0;
+    selectedDates.forEach(entry => {
+        total += ridesForTime(entry.time) * numChildren * 15;
+    });
+    document.getElementById('totalCost').innerText = total;
+    // Per-entry cost labels depend on numChildren too, so re-render the list
+    renderSelectedDates();
+}
+
+document.getElementById('numChildren').addEventListener('input', updateCost);
+
+// ---------- Save / restore parent + children info locally ----------
+function saveInfoToStorage() {
+    const numChildren = Math.max(0, Math.min(6, parseInt(document.getElementById('numChildren').value, 10) || 0));
+    const children = [];
+    for (let i = 1; i <= numChildren; i++) {
+        const nameEl = document.getElementById(`child${i}Name`);
+        const schoolEl = document.getElementById(`child${i}School`);
+        const gradeEl = document.getElementById(`child${i}Grade`);
+        if (!nameEl) continue;
+        children.push({
+            name: nameEl.value,
+            school: schoolEl ? schoolEl.value : '',
+            grade: gradeEl ? gradeEl.value : ''
+        });
+    }
+    const info = {
+        parentName: document.getElementById('parentName').value,
+        parentEmail: document.getElementById('parentEmail').value,
+        children: children
+    };
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(info));
+    } catch (e) {
+        // localStorage unavailable (e.g. private browsing) - fail silently
+    }
+}
+
+function loadInfoFromStorage() {
+    let saved;
+    try {
+        saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    } catch (e) {
+        saved = null;
+    }
+    if (!saved) return;
+
+    document.getElementById('parentName').value = saved.parentName || '';
+    document.getElementById('parentEmail').value = saved.parentEmail || '';
+
+    const numChildren = (saved.children || []).length;
+    if (numChildren > 0) {
+        document.getElementById('numChildren').value = numChildren;
+        updateChildrenForms();
+
+        saved.children.forEach((child, idx) => {
+            const i = idx + 1;
+            const nameEl = document.getElementById(`child${i}Name`);
+            const schoolEl = document.getElementById(`child${i}School`);
+            const gradeEl = document.getElementById(`child${i}Grade`);
+            if (nameEl) nameEl.value = child.name || '';
+            if (schoolEl) {
+                schoolEl.value = child.school || '';
+                if (gradeEl) gradeEl.innerHTML = gradeOptionsForSchool(schoolEl.value);
+                if (gradeEl) gradeEl.value = child.grade || '';
+            }
+        });
+    }
+
+    document.getElementById('savedInfoNote').style.display = 'block';
+}
+
+document.getElementById('clearSavedInfoLink').addEventListener('click', () => {
+    try {
+        localStorage.removeItem(STORAGE_KEY);
+    } catch (e) {
+        // ignore
+    }
+    document.getElementById('parentName').value = '';
+    document.getElementById('parentEmail').value = '';
+    document.getElementById('numChildren').value = '';
+    document.getElementById('childrenForms').innerHTML = '';
+    document.getElementById('savedInfoNote').style.display = 'none';
+});
+
+document.getElementById('hopOnForm').addEventListener('submit', (e) => {
+    if (selectedDates.length === 0) {
+        e.preventDefault();
+        alert('Please add at least one ride date before submitting.');
+        return;
+    }
+    saveInfoToStorage();
+});
+
+// ---------- Init ----------
+renderSelectedDates();
+loadInfoFromStorage();
+</script>
+</body>
+</html>
