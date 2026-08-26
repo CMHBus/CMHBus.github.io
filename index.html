@@ -168,7 +168,7 @@
 
     <b>Payments:</b> All payments are made via eTransfer to <b>cmhbusexec@gmail.com</b>.
     <ul>
-        <li>Submit this form by August 25th and pay <b>in full before September 1</b> for a <b>2% discount</b>.</li>
+        <li>You may pay <b>in full</b> in one lump sum. <s>Payments submitted by August 25th qualified for a <b>2% discount</b>.</s> (This early-bird discount has expired.)</li>
         <li>Or pay in <b>10 monthly installments</b>, due on the <b>1st of each month</b> from September to June.</li>
     </ul>
 
@@ -240,7 +240,7 @@
     <label for="paymentOptions">Payment Options:</label>
     <select id="paymentOptions" name="paymentOptions" required onchange="updateCost()">
         <option value="">-- Please select --</option>
-        <option value="fullPayment">I'll eTransfer the full amount to cmhbusexec@gmail.com  (one time payment — save 2%!)</option>
+        <option value="fullPayment">I'll eTransfer the full amount to cmhbusexec@gmail.com  (one time payment)</option>
         <option value="monthlyInstallments">I'll set up monthly eTransfer payments to cmhbusexec@gmail.com. Payments will be on the 1st day of the month.</option>
         <option value="other">I'll pay by another means</option>
     </select><br>
@@ -539,12 +539,14 @@ function updateCost() {
     let totalCost = a * FTE * FTE + b * FTE + c;
     
     // Apply discount if full payment is selected
-    const paymentOptions = document.getElementById('paymentOptions');
-    const isFullPayment = paymentOptions && paymentOptions.value === 'fullPayment';
-    if (isFullPayment) {
-        totalCost *= 0.98;
-    }
-    document.getElementById('savingsBadge').classList.toggle('visible', isFullPayment);
+    // EARLY BIRD 2% DISCOUNT DISABLED — kept here for reference in case it needs to be re-enabled
+    // const paymentOptions = document.getElementById('paymentOptions');
+    // const isFullPayment = paymentOptions && paymentOptions.value === 'fullPayment';
+    // if (isFullPayment) {
+    //     totalCost *= 0.98;
+    // }
+    // document.getElementById('savingsBadge').classList.toggle('visible', isFullPayment);
+    document.getElementById('savingsBadge').classList.remove('visible');
 
     // Update all cost displays
     const finalCost = Math.max(0, totalCost).toFixed(0);
